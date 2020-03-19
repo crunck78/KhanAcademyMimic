@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Constants.h"
+#include "Arithmetic.h"
 
 float areaRect(float length, float heigth)
 {
@@ -14,20 +15,20 @@ float areaTriangle(float base, float heigth)
 
 float circumOfDiam(float diameter)
 {
-	return (diameter * PHI);
+	return multOf(diameter, PI);
 }
 
 float diamOfCircum(float circumference)
 {
-	return (circumference / PHI);
+	return divOf(circumference, PI);
 }
 
 float areaCircle(float radius)
 {
-	return (PHI * power(radius, 2));
+	return multOf(PI, power(radius, 2));
 }
 
-float volumOfRectPrism(float length, float width, float heigth)
+float volumeOfRectPrism(float length, float width, float heigth)
 {
 	return(length * width * heigth);
 }
@@ -41,7 +42,33 @@ float areaOfRectPrism(float length1, float length2, float length3)
 	return (sidesArea + topBottomArea + frontBackArea);
 }
 
-float volumOfTriangularPrism(float base, float heigth, float length)
+float volumeOfTriangularPrism(float base, float heigth, float length)
 {
 	return (base * heigth * length) / 2.0f;
+}
+
+float volumeOfCylinder(float radius, float heigth)
+{
+	return (PI * power(radius, 2) * heigth);
+}
+
+float volumeOfPyramide(float length, float width, float heigth)
+{
+	return (length * width * heigth) / 3.0f;
+}
+
+float volumeOfCone(float radius, float heigth)
+{
+	return (PI * power(radius, 2) * heigth) / 3.0f;
+}
+
+float volumeOfSphere(float radius)
+{
+	return (4.0f * PI * power(radius, 3)) / 3.0f;
+}
+
+float pythagoreanTheorem(float a, float b)
+{
+	return
+
 }
