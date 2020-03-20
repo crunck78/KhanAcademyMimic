@@ -1,31 +1,62 @@
 #pragma once
 
 #include "Constants.h"
-#include "Arithmetic.h"
+#include <math.h>
+
+struct Point2d{
+	
+	float x;
+	float y;
+	
+	float getDistanceFrom(Point2d other)
+	{
+		return hypot( (other.x - x), (other.y - y));
+	}
+	
+	void translate( Point2d trans )
+	{
+		x+=trans;
+		y+=trans;
+	}
+};
+
+struct Line{
+	
+	Point2d point[2];
+	float length;
+};
+
+struct Triangle{
+	
+	Line line[3];
+	float area;
+	float angle[3];
+	float perimeter;
+};
 
 float areaRect(float length, float heigth)
 {
-	return multOf(length, heigth);
+	return (length * heigth);
 }
 
 float areaTriangle(float base, float heigth)
 {
-	return divOf(areaRect(base, heigth), 2.0f);
+	return (areaRect(base, heigth) / 2.0f);
 }
 
 float circumOfDiam(float diameter)
 {
-	return multOf(diameter, PI);
+	return (diameter * PI);
 }
 
 float diamOfCircum(float circumference)
 {
-	return divOf(circumference, PI);
+	return (circumference / PI);
 }
 
 float areaCircle(float radius)
 {
-	return multOf(PI, power(radius, 2));
+	return (PI * pow(radius, 2));
 }
 
 float volumeOfRectPrism(float length, float width, float heigth)
@@ -49,7 +80,7 @@ float volumeOfTriangularPrism(float base, float heigth, float length)
 
 float volumeOfCylinder(float radius, float heigth)
 {
-	return (PI * power(radius, 2) * heigth);
+	return (PI * pow(radius, 2) * heigth);
 }
 
 float volumeOfPyramide(float length, float width, float heigth)
@@ -59,16 +90,10 @@ float volumeOfPyramide(float length, float width, float heigth)
 
 float volumeOfCone(float radius, float heigth)
 {
-	return (PI * power(radius, 2) * heigth) / 3.0f;
+	return (PI * pow(radius, 2) * heigth) / 3.0f;
 }
 
 float volumeOfSphere(float radius)
 {
-	return (4.0f * PI * power(radius, 3)) / 3.0f;
-}
-
-float pythagoreanTheorem(float a, float b)
-{
-	return
-
+	return (4.0f * PI * pow(radius, 3) / 3.0f);
 }
