@@ -17,6 +17,12 @@ public:
 
 	}
 
+	void init(float x, float y)
+	{
+		setX(x);
+		setY(y);
+	}
+
 	void setX(float x)
 	{
 		m_x = x;
@@ -53,44 +59,85 @@ public:
 class Line{
 
 private:
-	Point2d m_endPoint[2];
+	Point2d m_endPoints[2];
+	Point2d m_midPoint;
 	float m_length;
 	
 public:
 	Line(Point2d endPoint1 = 0.0f, Point2d endPoint2 = 0.0f)
 	{
-		m_endPoint[0] = endPoint1;
-		m_endPoint[1] = endPoint2;
-		m_length = m_endPoint[0].getDistanceFrom(m_endPoint[1]);
+		m_endPoints[0] = endPoint1;
+		m_endPoints[1] = endPoint2;
+		m_setMidPoint();
+		m_setLength();
 	}
 
+	void setEndPoint(Point2d point, int index)
+	{
+		//TODO guard against invalid index
+		m_endPoints[index] = point;
+		m_setMidPoint();
+		m_setLength();
+	}
 
 	Point2d getEndPoint(int index)
 	{
 		//TODO guard against invalid index
-		return m_endPoint[index];
+		return m_points[index];
 	}
 
 	Point2d getMidPoint()
 	{
-
+		return m_midPoint;
 	}
 
+	float getLength()
+	{
+		return m_length;
+	}
 
 	void translate( float x, float y )
 	{
-		m_endPoint[0].translate( x, y );
-		m_endPoint[1].translate( x, y );
+		m_endPoints[0].translate(x, y);
+		m_endPoints[1].translate(x, y);
+		m_midPoint.translate(x, y);
+	}
+
+private:
+
+	void m_setLength()
+	{
+		m_length = m_points[0].getDistanceFrom(m_points[1]);
+	}
+
+	void m_setMidPoint()
+	{
+		//TODO
 	}
 };
 
-struct Triangle{
+class Triangle{
 	
-	Line line[3];
-	float area;
-	float angle[3];
-	float perimeter;
-	
+private:
+	/*
+	*	line[0] is the base, angle[0] is oppose to base,
+	*	angle[1] is oppose to line[1], angle[2] is oppose to line[2]
+	*/
+	Line m_lines[3];
+	float m_area;
+	float m_angle[3];
+	float m_perimeter;
+
+public:
+	Triangle(Line base = 0.0f, Point2d heigth = 0.0f)
+	{
+		m_lines[0] = base;
+		m_lines[1].setEndPoint(m_lines[0].getEndPoint(0));
+		m_lines[1].setEndPoint(height);
+		m_lines[2].setEndPoint(m_lines[0].getEndPoint(1));
+		m_lines[2].setEndPoint(height);
+	}
+
 	void translate( float x, float y )
 	{
 		line[0].translate( x, y );
