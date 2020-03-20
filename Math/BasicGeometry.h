@@ -15,8 +15,8 @@ struct Point2d{
 	
 	void translate( Point2d trans )
 	{
-		x+=trans;
-		y+=trans;
+		x += trans;
+		y += trans;
 	}
 };
 
@@ -24,6 +24,17 @@ struct Line{
 	
 	Point2d point[2];
 	float length;
+	
+	void translate( Point2d trans )
+	{
+		point[0].translate( trans );
+		point[1].translate( trans );
+	}
+	
+	Point2d getMidPoint()
+	{
+		
+	}
 };
 
 struct Triangle{
@@ -32,6 +43,13 @@ struct Triangle{
 	float area;
 	float angle[3];
 	float perimeter;
+	
+	void translate( Point2d trans )
+	{
+		line[0].translate( trans );
+		line[1].translate( trans );
+		line[2].translate( trans );
+	}
 };
 
 float areaRect(float length, float heigth)
