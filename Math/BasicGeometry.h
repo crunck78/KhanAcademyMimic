@@ -54,6 +54,20 @@ public:
 		m_x += x;
 		m_y += y;
 	}
+
+	void rotate(Point2d center, float angle)
+	{
+		//TODO
+	}
+
+	void reflectOver(float reflectionLineSlope)
+	{
+		//TODO 
+		/*
+		-find point of perpendicular intersection
+			-
+		*/
+	}
 };
 
 class Line{
@@ -61,15 +75,18 @@ class Line{
 private:
 	Point2d m_endPoints[2];
 	Point2d m_midPoint;
+	float m_slope; 
 	float m_length;
 	
 public:
+	//constructor rework need
 	Line(Point2d endPoint1 = 0.0f, Point2d endPoint2 = 0.0f)
 	{
 		m_endPoints[0] = endPoint1;
 		m_endPoints[1] = endPoint2;
 		m_setMidPoint();
 		m_setLength();
+		m_setSlope();
 	}
 
 	void setEndPoint(Point2d point, int index)
@@ -78,6 +95,7 @@ public:
 		m_endPoints[index] = point;
 		m_setMidPoint();
 		m_setLength();
+		m_setSlope();
 	}
 
 	Point2d getEndPoint(int index)
@@ -96,11 +114,25 @@ public:
 		return m_length;
 	}
 
+	float getSlope()
+	{
+		return m_slope;
+	}
+
 	void translate( float x, float y )
 	{
 		m_endPoints[0].translate(x, y);
 		m_endPoints[1].translate(x, y);
 		m_midPoint.translate(x, y);
+	}
+
+	void rotate(Point2d center, float angle)
+	{
+		//TODO
+
+
+
+		m_setSlope();
 	}
 
 private:
@@ -114,6 +146,11 @@ private:
 	{
 		//TODO
 	}
+
+	void m_setSlope()
+	{
+		//TOD
+	}
 };
 
 class Triangle{
@@ -124,11 +161,13 @@ private:
 	*	angle[1] is oppose to line[1], angle[2] is oppose to line[2]
 	*/
 	Line m_lines[3];
+	Point2d heigth; // point oppose to base;
 	float m_area;
 	float m_angle[3];
 	float m_perimeter;
 
 public:
+	// constructor parameters rework need
 	Triangle(Line base = 0.0f, Point2d heigth = 0.0f)
 	{
 		m_lines[0] = base;
@@ -143,6 +182,11 @@ public:
 		line[0].translate( x, y );
 		line[1].translate( x, y );
 		line[2].translate( x, y );
+	}
+
+	void rotate(Point2d center, float angle)
+	{
+		//TODO
 	}
 };
 
