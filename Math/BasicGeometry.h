@@ -3,37 +3,84 @@
 #include "Constants.h"
 #include <math.h>
 
-struct Point2d{
+class Point2d{
 	
-	float x;
-	float y;
+private:
+	float m_x;
+	float m_y;
 	
-	float getDistanceFrom(Point2d other)
+public:
+
+	Point2d(float x = 0, float y = 0)
+		: m_x(x), m_y(y)
 	{
-		return hypot( (other.x - x), (other.y - y));
+
+	}
+
+	void setX(float x)
+	{
+		m_x = x;
+	}
+
+	void setY(float y)
+	{
+		m_y = y;
+	}
+
+	float getX()
+	{
+		return m_x;
 	}
 	
-	void translate( Point2d trans )
+	float getY()
 	{
-		x += trans;
-		y += trans;
+		return m_y;
+	}
+
+	//if no argument is provided it will return the distance from origin(0,0)
+	float getDistanceFrom(Point2d other = 0.0f)
+	{
+		return hypot( (other.getX() - m_x), (other.getY() - m_y));
+	}
+	
+	void translate( float x, float y )
+	{
+		m_x += x;
+		m_y += y;
 	}
 };
 
-struct Line{
+class Line{
+
+private:
+	Point2d m_endPoint[2];
+	float m_length;
 	
-	Point2d point[2];
-	float length;
-	
-	void translate( Point2d trans )
+public:
+	Line(Point2d endPoint1 = 0.0f, Point2d endPoint2 = 0.0f)
 	{
-		point[0].translate( trans );
-		point[1].translate( trans );
+		m_endPoint[0] = endPoint1;
+		m_endPoint[1] = endPoint2;
+		m_length = m_endPoint[0].getDistanceFrom(m_endPoint[1]);
 	}
-	
+
+
+	Point2d getEndPoint(int index)
+	{
+		//TODO guard against invalid index
+		return m_endPoint[index];
+	}
+
 	Point2d getMidPoint()
 	{
-		
+
+	}
+
+
+	void translate( float x, float y )
+	{
+		m_endPoint[0].translate( x, y );
+		m_endPoint[1].translate( x, y );
 	}
 };
 
@@ -44,11 +91,11 @@ struct Triangle{
 	float angle[3];
 	float perimeter;
 	
-	void translate( Point2d trans )
+	void translate( float x, float y )
 	{
-		line[0].translate( trans );
-		line[1].translate( trans );
-		line[2].translate( trans );
+		line[0].translate( x, y );
+		line[1].translate( x, y );
+		line[2].translate( x, y );
 	}
 };
 
