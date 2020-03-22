@@ -101,7 +101,7 @@ public:
 	Point2d getEndPoint(int index)
 	{
 		//TODO guard against invalid index
-		return m_points[index];
+		return m_endPoints[index];
 	}
 
 	Point2d getMidPoint()
@@ -139,7 +139,7 @@ private:
 
 	void m_setLength()
 	{
-		m_length = m_points[0].getDistanceFrom(m_points[1]);
+		m_length = m_endPoints[0].getDistanceFrom(m_endPoints[1]);
 	}
 
 	void m_setMidPoint()
@@ -168,20 +168,20 @@ private:
 
 public:
 	// constructor parameters rework need
-	Triangle(Line base = 0.0f, Point2d heigth = 0.0f)
+	Triangle(Line base, Point2d heigth = 0.0f)
 	{
 		m_lines[0] = base;
-		m_lines[1].setEndPoint(m_lines[0].getEndPoint(0));
-		m_lines[1].setEndPoint(height);
-		m_lines[2].setEndPoint(m_lines[0].getEndPoint(1));
-		m_lines[2].setEndPoint(height);
+		m_lines[1].setEndPoint(m_lines[0].getEndPoint(0), 0);
+		m_lines[1].setEndPoint(heigth, 1);
+		m_lines[2].setEndPoint(m_lines[0].getEndPoint(1), 0);
+		m_lines[2].setEndPoint(heigth, 1);
 	}
 
 	void translate( float x, float y )
 	{
-		line[0].translate( x, y );
-		line[1].translate( x, y );
-		line[2].translate( x, y );
+		m_lines[0].translate( x, y );
+		m_lines[1].translate( x, y );
+		m_lines[2].translate( x, y );
 	}
 
 	void rotate(Point2d center, float angle)
