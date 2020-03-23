@@ -17,7 +17,7 @@ bool isOpposite(float a, float b)
 
 float opposite(float a)
 {
-	return (a - (2.0f * a));
+	return (0 - a);
 }
 
 float absoluteValue(float a)

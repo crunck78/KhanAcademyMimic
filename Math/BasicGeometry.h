@@ -73,29 +73,29 @@ public:
 class Line{
 
 private:
-	Point2d m_endPoints[2];
-	Point2d m_midPoint;
-	float m_slope; 
-	float m_length;
+	Point2d m_endPoints[2], m_midPoint;
+	float m_rise, m_run, m_slope, m_length;
+	bool m_isVertical, m_isHorizontal;
 	
 public:
 	//constructor rework need
+
 	Line(Point2d endPoint1 = 0.0f, Point2d endPoint2 = 0.0f)
 	{
 		m_endPoints[0] = endPoint1;
 		m_endPoints[1] = endPoint2;
-		m_setMidPoint();
 		m_setLength();
 		m_setSlope();
+		m_setMidPoint();
 	}
 
 	void setEndPoint(Point2d point, int index)
 	{
 		//TODO guard against invalid index
 		m_endPoints[index] = point;
-		m_setMidPoint();
 		m_setLength();
 		m_setSlope();
+		m_setMidPoint();
 	}
 
 	Point2d getEndPoint(int index)
@@ -119,6 +119,16 @@ public:
 		return m_slope;
 	}
 
+	float getRise()
+	{
+		return m_rise;
+	}
+
+	float getRun()
+	{
+		return m_run;
+	}
+
 	void translate( float x, float y )
 	{
 		m_endPoints[0].translate(x, y);
@@ -129,10 +139,17 @@ public:
 	void rotate(Point2d center, float angle)
 	{
 		//TODO
-
-
-
 		m_setSlope();
+	}
+
+	bool isVertical()
+	{
+		return (m_run == NULL) && (m_rise != 0.0f);
+	}
+
+	bool isHorizontal()
+	{
+		return (m_rise == 0.0f) && (m_run != NULL);
 	}
 
 private:
@@ -145,11 +162,27 @@ private:
 	void m_setMidPoint()
 	{
 		//TODO
+
 	}
 
 	void m_setSlope()
 	{
-		//TOD
+		m_setRise();
+		m_setRun();
+		if (isVertical())
+			m_slope = NULL; 
+		else
+			m_slope = m_rise / m_run;
+	}
+
+	void m_setRun()
+	{
+		m_run = (m_endPoints[0].getX() - m_endPoints[1].getX());
+	}
+
+	void m_setRise()
+	{
+		m_rise = (m_endPoints[0].getY() - m_endPoints[1].getY());
 	}
 };
 
