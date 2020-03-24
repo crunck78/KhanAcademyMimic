@@ -1,19 +1,16 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <map>
 #include <math.h>
-#define MIN_WHOLE_NUMER_VALUE		 0
-#define BASE_10						 10
-#define MAX_ROUNDING				 1000000000000000000
-#define MIN_ROUNDING								  10
-#define MAX_WHOLE_NUM_VALUE			 9223372036854775807 //18446744073709551615
-#define MAX_INT_VALUE				 9223372036854775807
-#define MIN_INT_VALUE				-9223372036854775808
+#include "Constants.h"
+#include "Arithmetic.h"
 
 class WholeNumber
 {
 private:
 	std::vector<unsigned long long int> m_placeValues; //holds the place values
+	std::map<unsigned long long int, unsigned long long int> m_factors; //holds a list of factors
 	unsigned long long int m_WholeNumber;// 18446744073709551615; // maximal value
 public:
 
@@ -23,12 +20,12 @@ public:
 
 	}
 
-	WholeNumber(unsigned long long int number)
+	WholeNumber(const unsigned long long int number)
 	{
 		setWholeNumber(number);
 	}
 
-	virtual void setWholeNumber(unsigned long long int number)
+	void setWholeNumber(const unsigned long long int number)
 	{
 		if (number > MAX_WHOLE_NUM_VALUE)
 			m_WholeNumber = MAX_WHOLE_NUM_VALUE;
@@ -38,12 +35,22 @@ public:
 		if(!m_placeValues.empty())
 			m_placeValues.clear();
 
+		if (!m_factors.empty())
+			m_factors.clear();
+
 		m_decomposeWholeNumber();
+		m_defactoriseWholeNumber();
 	}
 
-	unsigned long long int getWholeNumber()
+	const unsigned long long int getWholeNumber() const
 	{
 		return m_WholeNumber;
+	}
+
+	std::vector<unsigned long long int>::iterator getPlaceValues()
+	{
+		std::vector<unsigned long long int>::iterator placeValues = m_placeValues.begin();
+		return placeValues;
 	}
 
 	unsigned long long int getPlaceValues(int index)
@@ -56,7 +63,18 @@ public:
 		return m_placeValues.size();
 	}
 
-	unsigned long long int getRoundingTo( unsigned long long int nearstRounding) //1000000000000000000 max nearst rounding value
+	int getFactorsSize()
+	{
+		return m_factors.size();
+	}
+	
+	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsIterator()
+	{
+		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator factors = m_factors.rbegin();
+		return factors;
+	}
+
+	unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) //1000000000000000000 max nearst rounding value
 	{
 		const unsigned long long int roundingPoint = (nearstRounding / 2); // if above rounding point round up, else round down
 		const int roundUp = 1;
@@ -109,6 +127,19 @@ private:
 			m_placeValues.push_back((temp) * (placeValue));//last case, last place-value does not get evaluated, cus temp at this point will be less then BASE_10 ( being the last digit )
 		}
 	}
+
+	void m_defactoriseWholeNumber()
+	{
+		unsigned long long int divTest = 1;
+		while (m_factors.count(divTest) == 0)
+		{
+			if (isDivisible(m_WholeNumber, divTest))
+			{
+				m_factors[m_WholeNumber / divTest] = divTest;
+			}	
+			divTest++;
+		}
+	}
 };
 
 class Integer
@@ -145,11 +176,11 @@ public:
 		return (MIN_WHOLE_NUMER_VALUE - m_Integer);
 	}
 
-	long long int getAbsoluteValue()
+	unsigned long int getAbsoluteValue()
 	{
 		if (m_Integer < MIN_WHOLE_NUMER_VALUE)
-			return getOpposite();
-		return m_Integer;
+			return (unsigned long int)getOpposite();
+		return (unsigned long int)m_Integer;
 	}
 };
 
@@ -171,8 +202,6 @@ public:
 	{
 		//TODO check if rational
 	}*/
-
-
 };
 
 class IrrationalNumber
@@ -208,4 +237,5 @@ public:
 
 /*
 - Factors and multiples
+*	Divisibility Test 2, 3, 4, 5, 6, 9, 10
 */
