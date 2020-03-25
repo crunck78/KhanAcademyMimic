@@ -1,16 +1,18 @@
 #pragma once
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <map>
 #include <math.h>
 #include "Constants.h"
 #include "Arithmetic.h"
 
+
 class WholeNumber
 {
 private:
-	std::vector<unsigned long long int> m_placeValues; //holds the place values
-	std::map<unsigned long long int, unsigned long long int> m_factors; //holds a list of factors
+	std::vector<unsigned long long int> m_placeValues; //holds the place values after decomposition
+	std::map<unsigned long long int, unsigned long long int> m_factors; //holds a map of factors after defactorisation
 	unsigned long long int m_WholeNumber;// 18446744073709551615; // maximal value
 public:
 
@@ -47,34 +49,31 @@ public:
 		return m_WholeNumber;
 	}
 
-	std::vector<unsigned long long int>::iterator getPlaceValues()
+	const std::vector<unsigned long long int>::iterator getPlaceValuesBegin()
 	{
-		std::vector<unsigned long long int>::iterator placeValues = m_placeValues.begin();
-		return placeValues;
+		const std::vector<unsigned long long int>::iterator begin = m_placeValues.begin();
+		return begin;
 	}
 
-	unsigned long long int getPlaceValues(int index)
+	const std::vector<unsigned long long int>::iterator getPlaceValuesEnd()
 	{
-		return m_placeValues[index];
-	}
-
-	int getPlaceValuesSize()
-	{
-		return m_placeValues.size();
-	}
-
-	int getFactorsSize()
-	{
-		return m_factors.size();
+		const std::vector<unsigned long long int>::iterator end = m_placeValues.begin();
+		return end;
 	}
 	
-	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsIterator()
+	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRbegin()
 	{
-		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator factors = m_factors.rbegin();
-		return factors;
+		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rBegin = m_factors.rbegin();
+		return rBegin;
 	}
 
-	unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) //1000000000000000000 max nearst rounding value
+	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRend()
+	{
+		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rEnd = m_factors.rend();
+		return rEnd;
+	}
+
+	const unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) const //1000000000000000000 max nearst rounding value
 	{
 		const unsigned long long int roundingPoint = (nearstRounding / 2); // if above rounding point round up, else round down
 		const int roundUp = 1;
@@ -130,19 +129,24 @@ private:
 
 	void m_defactoriseWholeNumber()
 	{
-		unsigned long long int divTest = 1;
-		while (m_factors.count(divTest) == 0)
+		if(m_WholeNumber == MIN_WHOLE_NUMER_VALUE || m_WholeNumber == 1)
+			m_factors[m_WholeNumber] = m_WholeNumber;
+		else
 		{
-			if (isDivisible(m_WholeNumber, divTest))
+			unsigned long long int divTest = 1;
+			while (m_factors.count(divTest) == 0)
 			{
-				m_factors[m_WholeNumber / divTest] = divTest;
-			}	
-			divTest++;
+				if (isDivisible(m_WholeNumber, divTest))
+				{
+					m_factors[m_WholeNumber / divTest] = divTest;
+				}	
+				divTest++;
+			}
 		}
 	}
 };
 
-class Integer
+class Integer: public WholeNumber
 {
 private:
 	long long int m_Integer;
@@ -156,35 +160,35 @@ public:
 	}
 
 	Integer(long long int number)
-		:m_Integer(number)
 	{
-	
+		setInteger(number);
 	}
 
 	void setInteger(long long int number)
 	{
 		m_Integer = number;
+		setWholeNumber(getAbsoluteValue());
 	}
 
-	long long int getInteger()
+	const long long int getInteger() const
 	{
 		return m_Integer;
 	}
 
-	long long int getOpposite()
+	const long long int getOpposite() const
 	{
 		return (MIN_WHOLE_NUMER_VALUE - m_Integer);
 	}
 
-	unsigned long int getAbsoluteValue()
+	const unsigned long long int getAbsoluteValue() const
 	{
 		if (m_Integer < MIN_WHOLE_NUMER_VALUE)
-			return (unsigned long int)getOpposite();
-		return (unsigned long int)m_Integer;
+			return (unsigned long long int)getOpposite();
+		return (unsigned long long int)m_Integer;
 	}
 };
 
-class RationalNumber
+class RationalNumber: public Integer
 {
 private:
 	Integer m_Numerator;
@@ -193,15 +197,38 @@ private:
 public:
 	RationalNumber(long long int num, long long int den)
 	{
-		m_Numerator.setInteger(num);
-		m_Denominator.setInteger(den);
-		m_Rational = (long double)(m_Numerator.getInteger() / m_Denominator.getInteger());
+		setNumAndDenom(num, den);
 	}
 
-	/*RationalNumber(long double rational)
+	void setNumAndDenom(long long int num, long long int den)
 	{
-		//TODO check if rational
-	}*/
+		if (den == 0)
+		{
+			std::cout << "Denominator can not equal 0!" << std::endl;
+		}
+		else
+		{
+			m_Numerator.setInteger(num);
+			m_Denominator.setInteger(den);
+			m_Rational = (long double)m_Numerator.getInteger() / (long double)m_Denominator.getInteger();
+			setInteger((long long int)m_Rational);
+		}
+	}
+
+	const Integer getNumerator() const
+	{
+		return m_Numerator;
+	}
+
+	const Integer getDenominator() const
+	{
+		return m_Numerator;
+	}
+
+	const long double getRatio() const
+	{
+		return m_Rational;
+	}
 };
 
 class IrrationalNumber
@@ -214,28 +241,3 @@ public:
 		//TODO check if irrational
 	}
 };
-
-/*
-- Order of Operations
-
-*/
-
-/*
-- Arithmetic Properties
-	Commutative property of multiplication
-	Associative Property of multiplication
-	Identity property of multiplication
-
-	Commutative property of addition
-	Associative Property of addition
-	Identity property of addition
-*/
-
-/*
-- Distributive property
-*/
-
-/*
-- Factors and multiples
-*	Divisibility Test 2, 3, 4, 5, 6, 9, 10
-*/

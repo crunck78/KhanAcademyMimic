@@ -1,41 +1,43 @@
 #pragma once
 
 template<typename Number>
-bool isPossitive(Number a)
+bool isPossitive(const Number a)
 {
-	return (a > 0.0f);
+	return (a > 0);
 }
 
 template<typename Number>
-bool isNegative(Number a)
+bool isNegative(const Number a)
 {
-	return (a < 0.0f);
+	return (a < 0);
 }
 
 template<typename Number>
-bool isOpposite(Number a, Number b)
+bool isOpposite(const Number a, const Number b)
 {
-	return (a + b) == 0.0f;
+	return (a + b) == 0;
 }
 
 template<typename Number>
-Number opposite(Number a)
+bool isEven(const Number a)
 {
-	return (0.0f - a);
-}
-
-bool isEven(long long int a)
-{
-	return (long double)(a % 2) == 0.0f;
-}
-
-bool isDivisible(long long int a, long long int b)
-{
-	return (float)(a % b) == 0.0f;
+	return (a % 2) == 0;
 }
 
 template<typename Number>
-Number absoluteValue(Number a)
+bool isDivisible(const Number a, const Number b)
+{
+	return (a % b) == 0;
+}
+
+template<typename Number>
+const Number opposite(const Number a)
+{
+	return (0 - a);
+}
+
+template<typename Number>
+const Number absoluteValue(Number a)
 {
 	if (isNegative(a))
 		return opposite(a);
@@ -43,7 +45,7 @@ Number absoluteValue(Number a)
 }
 
 template<typename Number>
-long double midValue(Number a, Number b)
+const long double midValue(Number a, Number b)
 {
-	return (long double)((a + b) / 2.0f);
+	return (long double)(a + b) / 2.0;
 }
