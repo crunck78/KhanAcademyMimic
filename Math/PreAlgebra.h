@@ -9,38 +9,31 @@
 
 class WholeNumber
 {
-private:
-	std::vector<unsigned long long int> m_placeValues; //holds the place values after decomposition
-	std::map<unsigned long long int, unsigned long long int> m_factors; //holds a map of factors after defactorisation
+protected:
+	std::map<unsigned long long int, unsigned short int> m_decomposeValues; // holds a map of m_Wholenumber decomposition, key-values are the place values, and element-values are the digits coresponding to m_WhloeNumber's place-value
+	std::vector<unsigned long long int> m_expandValues; //holds the expand-values of m_WholeNumber after decomposition ( expand-value equals key-value * coresponding element-value of m_decomposeValues )
+	std::map<unsigned long long int, unsigned long long int> m_factorPairs; //holds a map of factors after defactorisation, key-values and element-value are the pair factors of m_WholeNumber that compose it
 	unsigned long long int m_WholeNumber;// 18446744073709551615; // maximal value
 public:
 
 	WholeNumber()
-		:m_WholeNumber(0)
+		:m_WholeNumber(MIN_WHOLE_NUM)
 	{
-
+		
 	}
 
 	WholeNumber(const unsigned long long int number)
 	{
-		setWholeNumber(number);
+		set(number);
 	}
 
-	void setWholeNumber(const unsigned long long int number)
+	virtual void set(const unsigned long long int number)
 	{
-		if (number > MAX_WHOLE_NUM_VALUE)
-			m_WholeNumber = MAX_WHOLE_NUM_VALUE;
+		if (number > MAX_WHOLE_NUM)
+			m_WholeNumber = MAX_WHOLE_NUM;
 		else
 			m_WholeNumber = number;
-
-		if(!m_placeValues.empty())
-			m_placeValues.clear();
-
-		if (!m_factors.empty())
-			m_factors.clear();
-
-		m_decomposeWholeNumber();
-		m_defactoriseWholeNumber();
+		m_clear();
 	}
 
 	const unsigned long long int getWholeNumber() const
@@ -48,31 +41,43 @@ public:
 		return m_WholeNumber;
 	}
 
-	const std::vector<unsigned long long int>::iterator getPlaceValuesBegin()
+	const std::vector<unsigned long long int>::reverse_iterator getExpandValuesRbegin()
 	{
-		const std::vector<unsigned long long int>::iterator begin = m_placeValues.begin();
-		return begin;
+		const std::vector<unsigned long long int>::reverse_iterator rbegin = m_expandValues.rbegin();
+		return rbegin;
 	}
 
-	const std::vector<unsigned long long int>::iterator getPlaceValuesEnd()
+	const std::vector<unsigned long long int>::reverse_iterator getExpandValuesRend()
 	{
-		const std::vector<unsigned long long int>::iterator end = m_placeValues.begin();
-		return end;
+		const std::vector<unsigned long long int>::reverse_iterator rend = m_expandValues.rend();
+		return rend;
+	}
+
+	const std::map<unsigned long long int, unsigned short int>::reverse_iterator getDecomposeValuesRbegin()
+	{
+		const std::map<unsigned long long int, unsigned short int>::reverse_iterator rBegin = m_decomposeValues.rbegin();
+		return rBegin;
+	}
+
+	const std::map<unsigned long long int, unsigned short int>::reverse_iterator getDecomposeValuesRend()
+	{
+		const std::map<unsigned long long int, unsigned short int>::reverse_iterator rEnd = m_decomposeValues.rend();
+		return rEnd;
 	}
 	
 	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRbegin()
 	{
-		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rBegin = m_factors.rbegin();
+		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rBegin = m_factorPairs.rbegin();
 		return rBegin;
 	}
 
 	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRend()
 	{
-		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rEnd = m_factors.rend();
+		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rEnd = m_factorPairs.rend();
 		return rEnd;
 	}
 
-	const unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) const //1000000000000000000 max nearst rounding value
+	const unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) const // 1000000000000000000 max nearst rounding value,  10 min nearsts rounding
 	{
 		const unsigned long long int roundingPoint = (nearstRounding / 2); // if above rounding point round up, else round down
 		const int roundUp = 1;
@@ -103,70 +108,97 @@ public:
 		//TODO
 	}
 
-private:
 	//it is a mess
-	void m_decomposeWholeNumber()
+	void decompose()
 	{
+		unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
+		unsigned long long int placeValue = 1; //holds the place-value to get from temp
+
 		if (m_WholeNumber < BASE_10)
 		{
-			m_placeValues.push_back(m_WholeNumber);
+			m_expandValues.push_back(m_WholeNumber);
+			m_decomposeValues[placeValue] = m_WholeNumber;
 		}
-		else // get every place value untile last case
+		else // get every expand-value and decomposed-value untile last place-value
 		{
-			unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
-			unsigned long long int placeValue = 1; //holds the place-value to get from temp
-
 			while (temp >= BASE_10)
 			{
-				m_placeValues.push_back((temp % BASE_10) * (placeValue)); //get last digit of temp place-value
+				m_decomposeValues[placeValue] = (temp % BASE_10);
+				m_expandValues.push_back((temp % BASE_10) * (placeValue)); //get last digit of temp place-value
 				temp = temp / BASE_10; // next left-side trunc, trow the last digit out
 				placeValue *= BASE_10;// next place value
 			}
-			m_placeValues.push_back((temp) * (placeValue));//last case, last place-value does not get evaluated, cus temp at this point will be less then BASE_10 ( being the last digit )
+			m_decomposeValues[placeValue] = temp;
+			m_expandValues.push_back((temp) * (placeValue));//last case, last place-value does not get evaluated, cus temp at this point will be less then BASE_10 ( being the last digit )
 		}
 	}
 
-	void m_defactoriseWholeNumber()
+	void defactorise()
 	{
-		if(m_WholeNumber == MIN_WHOLE_NUMER_VALUE || m_WholeNumber == 1)
-			m_factors[m_WholeNumber] = m_WholeNumber;
+		const int c_firstFactor = 1;
+		const int c_noMatch = 0;
+
+		if(m_WholeNumber == MIN_WHOLE_NUM || m_WholeNumber == c_firstFactor)
+			m_factorPairs[m_WholeNumber] = m_WholeNumber;
 		else
 		{
-			unsigned long long int divTest = 1;
-			while (m_factors.count(divTest) == 0)
+			unsigned long long int divTest = c_firstFactor;
+			while (m_factorPairs.count(divTest) == c_noMatch)
 			{
-				if (isDivisible(m_WholeNumber, divTest))
+				if (m_isDivisible(divTest))
 				{
-					m_factors[m_WholeNumber / divTest] = divTest;
+					m_factorPairs[m_WholeNumber / divTest] = divTest;
 				}	
 				divTest++;
 			}
 		}
 	}
+
+protected:
+	void m_clear()
+	{
+		if (!m_expandValues.empty())
+			m_expandValues.clear();
+
+		if (!m_factorPairs.empty())
+			m_factorPairs.clear();
+	}
+
+private:
+	bool m_isDivisible(unsigned long long int divisor)
+	{
+		return (m_WholeNumber % divisor) == MIN_WHOLE_NUM;
+	}
 };
 
 class Integer: public WholeNumber
 {
-private:
+protected:
 	long long int m_Integer;
 
 public:
 
 	Integer()
-		:m_Integer(0)
+		:m_Integer(MIN_WHOLE_NUM)
 	{
 
 	}
 
 	Integer(long long int number)
 	{
-		setInteger(number);
+		set(number);
 	}
 
-	void setInteger(long long int number)
+	virtual void set(long long int number)
 	{
-		m_Integer = number;
-		setWholeNumber(getAbsoluteValue());
+		if (number > MAX_INT)
+			m_Integer = MAX_INT;
+		else if(number < MIN_INT)
+			m_Integer = MIN_INT;
+		else
+			m_Integer = number;
+		m_WholeNumber = getAbsoluteValue();
+		m_clear();
 	}
 
 	const long long int getInteger() const
@@ -176,12 +208,12 @@ public:
 
 	const long long int getOpposite() const
 	{
-		return (MIN_WHOLE_NUMER_VALUE - m_Integer);
+		return (MIN_WHOLE_NUM - m_Integer);
 	}
 
 	const unsigned long long int getAbsoluteValue() const
 	{
-		if (m_Integer < MIN_WHOLE_NUMER_VALUE)
+		if (m_Integer < MIN_WHOLE_NUM)
 			return (unsigned long long int)getOpposite();
 		return (unsigned long long int)m_Integer;
 	}
@@ -196,21 +228,21 @@ private:
 public:
 	RationalNumber(long long int num, long long int den)
 	{
-		setNumAndDenom(num, den);
+		set(num, den);
 	}
 
-	void setNumAndDenom(long long int num, long long int den)
+	void set(long long int num, long long int den)
 	{
-		if (den == 0)
-		{
+		if (den == MIN_WHOLE_NUM)
 			std::cout << "Denominator can not equal 0!" << std::endl;
-		}
 		else
 		{
-			m_Numerator.setInteger(num);
-			m_Denominator.setInteger(den);
+			m_Numerator.set(num);
+			m_Denominator.set(den);
 			m_Rational = (long double)m_Numerator.getInteger() / (long double)m_Denominator.getInteger();
-			setInteger((long long int)m_Rational);
+			m_Integer = (long long int)m_Rational;
+			m_WholeNumber = getAbsoluteValue();
+			m_clear();
 		}
 	}
 
