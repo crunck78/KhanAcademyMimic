@@ -7,7 +7,6 @@
 #include "Constants.h"
 #include "Arithmetic.h"
 
-
 class WholeNumber
 {
 private:
