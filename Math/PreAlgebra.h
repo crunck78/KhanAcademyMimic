@@ -109,58 +109,42 @@ public:
 	}
 
 	//it is a mess
-	void decompose()
+	virtual void decompose()
 	{
 		unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
 		unsigned long long int placeValue = 1; //holds the place-value to get from temp
-
-		if (m_WholeNumber < BASE_10)
-		{
-			m_expandValues.push_back(m_WholeNumber);
-			m_decomposeValues[placeValue] = m_WholeNumber;
-		}
-		else // get every expand-value and decomposed-value untile last place-value
-		{
-			while (temp >= BASE_10)
-			{
-				m_decomposeValues[placeValue] = (temp % BASE_10);
-				m_expandValues.push_back((temp % BASE_10) * (placeValue)); //get last digit of temp place-value
-				temp = temp / BASE_10; // next left-side trunc, trow the last digit out
-				placeValue *= BASE_10;// next place value
-			}
-			m_decomposeValues[placeValue] = temp;
-			m_expandValues.push_back((temp) * (placeValue));//last case, last place-value does not get evaluated, cus temp at this point will be less then BASE_10 ( being the last digit )
-		}
+		m_setDecomposeValue(temp, placeValue);
 	}
 
-	void defactorise()
+	virtual void factorise()
 	{
-		const int c_firstFactor = 1;
-		const int c_noMatch = 0;
-
-		if(m_WholeNumber == MIN_WHOLE_NUM || m_WholeNumber == c_firstFactor)
-			m_factorPairs[m_WholeNumber] = m_WholeNumber;
-		else
+		if (m_WholeNumber != MIN_WHOLE_NUM) // can't factorise 0
 		{
-			unsigned long long int divTest = c_firstFactor;
-			while (m_factorPairs.count(divTest) == c_noMatch)
+			unsigned long long int factorTest = 1;
+			if(m_WholeNumber == factorTest) 
+				m_factorPairs[m_WholeNumber] = factorTest;
+			else // start factorising number bigger then 1
 			{
-				if (m_isDivisible(divTest))
+				while (! m_factorPairs.count(factorTest)) // factor not already found, keep searching 
 				{
-					m_factorPairs[m_WholeNumber / divTest] = divTest;
-				}	
-				divTest++;
+					if (m_isDivisible(factorTest)) // found small factor
+						m_factorPairs[m_WholeNumber / factorTest] = factorTest; // key-map = bigger factor, key-element = small factor
+					factorTest++; 
+				}
 			}
-		}
+		}	
 	}
 
 protected:
-	void m_clear()
+	void m_clear() // clear maps and vector members
 	{
-		if (!m_expandValues.empty())
+		if (! m_decomposeValues.empty())
+			m_decomposeValues.clear();
+
+		if (! m_expandValues.empty())
 			m_expandValues.clear();
 
-		if (!m_factorPairs.empty())
+		if (! m_factorPairs.empty())
 			m_factorPairs.clear();
 	}
 
@@ -168,6 +152,21 @@ private:
 	bool m_isDivisible(unsigned long long int divisor)
 	{
 		return (m_WholeNumber % divisor) == MIN_WHOLE_NUM;
+	}
+
+	void m_setDecomposeValue(unsigned long long int &number, unsigned long long int &placeValue)
+	{
+		if (number < BASE_10) // last place-value
+		{
+			m_expandValues.push_back(number * placeValue);
+			m_decomposeValues[placeValue] = number;
+		}
+		else // get every decomposed-value and expand-value  untile last place-value
+		{
+			m_decomposeValues[placeValue] = (number % BASE_10);
+			m_expandValues.push_back((number % BASE_10) * (placeValue));
+			m_setDecomposeValue((number /= BASE_10), (placeValue *= BASE_10)); // next decomposed- and expand-value
+		}
 	}
 };
 
@@ -253,12 +252,24 @@ public:
 
 	const Integer getDenominator() const
 	{
-		return m_Numerator;
+		return m_Denominator;
 	}
 
 	const long double getRatio() const
 	{
 		return m_Rational;
+	}
+
+	void decompose()
+	{
+		m_Numerator.decompose();
+		m_Denominator.decompose();
+	}
+
+	void factorise()
+	{
+		m_Numerator.factorise();
+		m_Denominator.factorise();
 	}
 };
 
