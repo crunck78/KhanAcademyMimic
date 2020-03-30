@@ -13,7 +13,8 @@ protected:
 	std::map<unsigned long long int, unsigned short int> m_decomposeValues; // holds a map of m_Wholenumber decomposition, key-values are the place values, and element-values are the digits coresponding to m_WhloeNumber's place-value
 	std::vector<unsigned long long int> m_expandValues; //holds the expand-values of m_WholeNumber after decomposition ( expand-value equals key-value * coresponding element-value of m_decomposeValues )
 	std::map<unsigned long long int, unsigned long long int> m_factorPairs; //holds a map of factors after defactorisation, key-values and element-value are the pair factors of m_WholeNumber that compose it
-	unsigned long long int m_WholeNumber;// 18446744073709551615; // maximal value
+	std::vector<unsigned long long int> m_primeFactors; // holds a vector of prime-factors
+	unsigned long long int m_WholeNumber;// 9999999999999; // maximal value
 public:
 
 	WholeNumber()
@@ -29,16 +30,33 @@ public:
 
 	virtual void set(const unsigned long long int number)
 	{
-		if (number > MAX_WHOLE_NUM)
-			m_WholeNumber = MAX_WHOLE_NUM;
-		else
-			m_WholeNumber = number;
-		m_clear();
+if (number > MAX_WHOLE_NUM)
+m_WholeNumber = MAX_WHOLE_NUM;
+else
+m_WholeNumber = number;
+m_clear();
 	}
 
 	const unsigned long long int getWholeNumber() const
 	{
 		return m_WholeNumber;
+	}
+
+	const std::vector<unsigned long long int> getPrimeFactors() const
+	{
+		return m_primeFactors;
+	}
+
+	const std::vector<unsigned long long int>::iterator getPrimeFactorsbegin()
+	{
+		const std::vector<unsigned long long int>::iterator begin = m_primeFactors.begin();
+		return begin;
+	}
+
+	const std::vector<unsigned long long int>::iterator getPrimeFactorsend()
+	{
+		const std::vector<unsigned long long int>::iterator end = m_primeFactors.end();
+		return end;
 	}
 
 	const std::vector<unsigned long long int>::reverse_iterator getExpandValuesRbegin()
@@ -64,7 +82,7 @@ public:
 		const std::map<unsigned long long int, unsigned short int>::reverse_iterator rEnd = m_decomposeValues.rend();
 		return rEnd;
 	}
-	
+
 	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRbegin()
 	{
 		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rBegin = m_factorPairs.rbegin();
@@ -77,7 +95,7 @@ public:
 		return rEnd;
 	}
 
-	const unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) const // 1000000000000000000 max nearst rounding value,  10 min nearsts rounding
+	const unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) const // 100000000000 max nearst rounding value,  10 min nearsts rounding
 	{
 		const unsigned long long int roundingPoint = (nearstRounding / 2); // if above rounding point round up, else round down
 		const int roundUp = 1;
@@ -100,39 +118,56 @@ public:
 		return (leftTrunc + roundUp) * nearstRounding; //roundUp
 	}
 
-/*
-	Regrouping whole numbers
-*/
-	void regroupAs()
-	{
-		//TODO
-	}
-
-	//it is a mess
 	virtual void decompose()
 	{
-		unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
-		unsigned long long int placeValue = 1; //holds the place-value to get from temp
-		m_setDecomposeValue(temp, placeValue);
+		if (m_decomposeValues.empty() && m_expandValues.empty()) // do decomposition
+		{
+			unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
+			unsigned long long int placeValue = 1; //holds the place-value to get from temp
+			m_setDecomposeValue(temp, placeValue);
+		}
+		else
+			std::cout << "Already decomposed!" << std::endl;
 	}
 
 	virtual void factorise()
 	{
 		if (m_WholeNumber != MIN_WHOLE_NUM) // can't factorise 0
 		{
-			unsigned long long int factorTest = 1;
-			if(m_WholeNumber == factorTest) 
-				m_factorPairs[m_WholeNumber] = factorTest;
-			else // start factorising number bigger then 1
+			if (m_factorPairs.empty() && m_primeFactors.empty()) // do factorization
 			{
-				while (! m_factorPairs.count(factorTest)) // factor not already found, keep searching 
+				unsigned long long int factorTest = 1;
+				unsigned long long int factor = m_WholeNumber;
+				unsigned long long int factorCounter = 1;
+				do
 				{
-					if (m_isDivisible(factorTest)) // found small factor
-						m_factorPairs[m_WholeNumber / factorTest] = factorTest; // key-map = bigger factor, key-element = small factor
-					factorTest++; 
-				}
+					if (m_WholeNumber % factorTest == 0) //found factor
+						m_factorPairs[factorTest] = (m_WholeNumber / factorTest);
+					factorTest++;// start prime factorization with 2
+					while (factor % factorTest == 0)// found prime factor, 
+					{
+						m_primeFactors.push_back(factorTest);
+						factor /= factorTest; //try get it again
+						factorCounter *= factorTest; //all prime factors mutiply equals m_WholeNumber
+					}
+				} while (factorCounter != m_WholeNumber); // not find all prime factors
 			}
-		}	
+			else
+				std::cout << "Already factorized!" << std::endl;
+		}
+		else
+			std::cout << "Can't factorise 0!" << std::endl;
+	}
+
+	const unsigned long long int getLCM(const unsigned long long int &number...) const
+	{
+
+	}
+
+	//Regrouping whole numbers
+	void regroupAs()
+	{
+		//TODO
 	}
 
 protected:
@@ -146,6 +181,9 @@ protected:
 
 		if (! m_factorPairs.empty())
 			m_factorPairs.clear();
+
+		if (! m_primeFactors.empty())
+			m_primeFactors.clear();
 	}
 
 private:
@@ -166,6 +204,31 @@ private:
 			m_decomposeValues[placeValue] = (number % BASE_10);
 			m_expandValues.push_back((number % BASE_10) * (placeValue));
 			m_setDecomposeValue((number /= BASE_10), (placeValue *= BASE_10)); // next decomposed- and expand-value
+		}
+	}
+
+	//not done TODO
+	void m_setFactorPair(unsigned long long int &factor, unsigned long long int &factorTest, unsigned long long int &factorCounter)
+	{
+		if (factorCounter == m_WholeNumber)
+		{
+			m_factorPairs[factorTest] = (m_WholeNumber / factorTest);
+		}
+		else
+		{
+			if (m_WholeNumber % factorTest == 0) //found factor
+				m_factorPairs[factorTest] = (m_WholeNumber / factorTest);
+			m_setPrimeFactor(factor, ++factorTest, factorCounter);// start prime factorization with 2
+		}
+	}
+
+	//not done TODO
+	void m_setPrimeFactor(unsigned long long int &factor, unsigned long long int &factorTest, unsigned long long int &factorCounter)
+	{
+		if(factor % factorTest == 0)// found prime factor, 
+		{
+			m_primeFactors.push_back(factorTest);
+			m_setPrimeFactor((factor /= factorTest), factorTest, (factorCounter *= factorTest));
 		}
 	}
 };
