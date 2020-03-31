@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <utility>
+//#include <utility>
 #include <vector>
 #include <map>
 #include <math.h>
@@ -132,38 +132,35 @@ m_clear();
 
 	virtual void factorise()
 	{
-		if (m_WholeNumber != MIN_WHOLE_NUM) // can't factorise 0
+		if (m_WholeNumber == MIN_WHOLE_NUM) // can't factorise 0
 		{
-			if (m_factorPairs.empty() && m_primeFactors.empty()) // do factorization
-			{
-				unsigned long long int factorTest = 1;
-				unsigned long long int factor = m_WholeNumber;
-				unsigned long long int factorCounter = 1;
-				do
-				{
-					if (m_WholeNumber % factorTest == 0) //found factor
-						m_factorPairs[factorTest] = (m_WholeNumber / factorTest);
-					factorTest++;// start prime factorization with 2
-					while (factor % factorTest == 0)// found prime factor, 
-					{
-						m_primeFactors.push_back(factorTest);
-						factor /= factorTest; //try get it again
-						factorCounter *= factorTest; //all prime factors mutiply equals m_WholeNumber
-					}
-				} while (factorCounter != m_WholeNumber); // not find all prime factors
-			}
-			else
-				std::cout << "Already factorized!" << std::endl;
-		}
-		else
 			std::cout << "Can't factorise 0!" << std::endl;
+		}
+		else if (!m_factorPairs.empty())
+		{
+			std::cout << "Already factorized!" << std::endl;
+		}
+		else if (m_WholeNumber == MIN_FACTOR) //number equals 1
+		{
+			m_factorPairs[MIN_FACTOR] = MIN_FACTOR;
+		}
+		else// do factorization for number greater then 1
+		{
+			unsigned long long int number = m_WholeNumber; //number is not changed by m_setFactorPair, but changed by prime factorization
+			unsigned long long int factorTest = 1; //number to be tested if it is a factor
+			m_setFactorPair(number, factorTest);
+
+			unsigned long long int factorCounter = 1;
+			factorTest = 1; //reset the factorTest
+			m_setPrimeFactor(number, ++factorTest, factorCounter);//start prime factorization with 2
+		}
 	}
 
 	const unsigned long long int getLCM(const unsigned long long int &number...) const
 	{
-
+	
 	}
-
+	
 	//Regrouping whole numbers
 	void regroupAs()
 	{
@@ -207,28 +204,29 @@ private:
 		}
 	}
 
-	//not done TODO
-	void m_setFactorPair(unsigned long long int &factor, unsigned long long int &factorTest, unsigned long long int &factorCounter)
+	void m_setPrimeFactor(unsigned long long int &number, unsigned long long int &factorTest, unsigned long long int &factorCounter)
 	{
-		if (factorCounter == m_WholeNumber)
+		while(factorCounter != m_WholeNumber) //check if found all prime factors
 		{
-			m_factorPairs[factorTest] = (m_WholeNumber / factorTest);
-		}
-		else
-		{
-			if (m_WholeNumber % factorTest == 0) //found factor
-				m_factorPairs[factorTest] = (m_WholeNumber / factorTest);
-			m_setPrimeFactor(factor, ++factorTest, factorCounter);// start prime factorization with 2
+			while(number % factorTest == 0) //prime factorization starts with 2
+			{
+				m_primeFactors.push_back(factorTest);
+				number /= factorTest;
+				factorCounter *= factorTest; // all prime factors multiply equals number to be factorise
+			}
+			factorTest++;
 		}
 	}
 
-	//not done TODO
-	void m_setPrimeFactor(unsigned long long int &factor, unsigned long long int &factorTest, unsigned long long int &factorCounter)
+	void m_setFactorPair(const unsigned long long int &number, unsigned long long int &factorTest)
 	{
-		if(factor % factorTest == 0)// found prime factor, 
+		while (m_factorPairs.count(number / factorTest) == 0)//check if already found factor
 		{
-			m_primeFactors.push_back(factorTest);
-			m_setPrimeFactor((factor /= factorTest), factorTest, (factorCounter *= factorTest));
+			if (number % factorTest == 0) //found factor
+			{
+				m_factorPairs[factorTest] = (number / factorTest);
+			}
+			factorTest++;// next factor
 		}
 	}
 };
