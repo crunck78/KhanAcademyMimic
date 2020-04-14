@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 //#include <utility>
+#include <cstdarg>
 #include <vector>
 #include <map>
 #include <math.h>
@@ -10,6 +11,7 @@
 class WholeNumber
 {
 protected:
+
 	std::map<unsigned long long int, unsigned short int> m_decomposeValues; // holds a map of m_Wholenumber decomposition, key-values are the place values, and element-values are the digits coresponding to m_WhloeNumber's place-value
 	std::vector<unsigned long long int> m_expandValues; //holds the expand-values of m_WholeNumber after decomposition ( expand-value equals key-value * coresponding element-value of m_decomposeValues )
 	std::map<unsigned long long int, unsigned long long int> m_factorPairs; //holds a map of factors after defactorisation, key-values and element-value are the pair factors of m_WholeNumber that compose it
@@ -19,9 +21,9 @@ public:
 
 	WholeNumber()
 		:m_WholeNumber(MIN_WHOLE_NUM)
-	{
+		{
 		
-	}
+		}
 
 	WholeNumber(const unsigned long long int number)
 	{
@@ -30,11 +32,11 @@ public:
 
 	virtual void set(const unsigned long long int number)
 	{
-if (number > MAX_WHOLE_NUM)
-m_WholeNumber = MAX_WHOLE_NUM;
-else
-m_WholeNumber = number;
-m_clear();
+		if (number > MAX_WHOLE_NUM)
+			m_WholeNumber = MAX_WHOLE_NUM;
+		else
+			m_WholeNumber = number;
+		m_clear();
 	}
 
 	const unsigned long long int getWholeNumber() const
@@ -47,13 +49,18 @@ m_clear();
 		return m_primeFactors;
 	}
 
+	const std::vector<unsigned long long int> getExpandValues() const
+	{
+		return m_expandValues;
+	}
+
 	const std::vector<unsigned long long int>::iterator getPrimeFactorsbegin()
 	{
 		const std::vector<unsigned long long int>::iterator begin = m_primeFactors.begin();
 		return begin;
 	}
 
-	const std::vector<unsigned long long int>::iterator getPrimeFactorsend()
+	const std::vector<unsigned long long int>::iterator getPrimeFactorsEnd()
 	{
 		const std::vector<unsigned long long int>::iterator end = m_primeFactors.end();
 		return end;
@@ -83,16 +90,16 @@ m_clear();
 		return rEnd;
 	}
 
-	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRbegin()
+	const std::map<unsigned long long int, unsigned long long int>::iterator getFactorsBegin()
 	{
-		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rBegin = m_factorPairs.rbegin();
-		return rBegin;
+		const std::map<unsigned long long int, unsigned long long int>::iterator begin = m_factorPairs.begin();
+		return begin;
 	}
 
-	const std::map<unsigned long long int, unsigned long long int>::reverse_iterator getFactorsRend()
+	const std::map<unsigned long long int, unsigned long long int>::iterator getFactorsEnd()
 	{
-		const std::map<unsigned long long int, unsigned long long int>::reverse_iterator rEnd = m_factorPairs.rend();
-		return rEnd;
+		const std::map<unsigned long long int, unsigned long long int>::iterator end = m_factorPairs.end();
+		return end;
 	}
 
 	const unsigned long long int getRoundingTo(const unsigned long long int nearstRounding) const // 100000000000 max nearst rounding value,  10 min nearsts rounding
@@ -120,47 +127,149 @@ m_clear();
 
 	virtual void decompose()
 	{
-		if (m_decomposeValues.empty() && m_expandValues.empty()) // do decomposition
+		if (! (m_decomposeValues.empty() && m_expandValues.empty()))
+			std::cout << "Already decomposed!" << std::endl;
+		else // do decomposition
 		{
 			unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
 			unsigned long long int placeValue = 1; //holds the place-value to get from temp
 			m_setDecomposeValue(temp, placeValue);
 		}
-		else
-			std::cout << "Already decomposed!" << std::endl;
 	}
 
 	virtual void factorise()
 	{
 		if (m_WholeNumber == MIN_WHOLE_NUM) // can't factorise 0
-		{
 			std::cout << "Can't factorise 0!" << std::endl;
-		}
-		else if (!m_factorPairs.empty())
-		{
+		else if (! m_factorPairs.empty())
 			std::cout << "Already factorized!" << std::endl;
-		}
 		else if (m_WholeNumber == MIN_FACTOR) //number equals 1
-		{
 			m_factorPairs[MIN_FACTOR] = MIN_FACTOR;
+		else// do factorization for number greater then 1
+		{
+			unsigned long long int number = m_WholeNumber; //number is not changed by m_setFactorPair, but changed by prime factorization
+			unsigned long long int factorTest = MIN_FACTOR; //number to be tested if it is a factor
+			m_setFactorPair(number, factorTest);
 		}
+	}
+
+	virtual void primeFactorise()
+	{
+		if (m_WholeNumber == MIN_WHOLE_NUM) // can't factorise 0
+			std::cout << "Can't factorise 0!" << std::endl;
+		else if (!m_primeFactors.empty())
+			std::cout << "Already prime-factorized!" << std::endl;
+		else if (m_WholeNumber == MIN_FACTOR) //number equals 1
+			std::cout << "Number 1 has no prime decomposition." << std::endl; // vector remains empty
 		else// do factorization for number greater then 1
 		{
 			unsigned long long int number = m_WholeNumber; //number is not changed by m_setFactorPair, but changed by prime factorization
 			unsigned long long int factorTest = 1; //number to be tested if it is a factor
-			m_setFactorPair(number, factorTest);
-
 			unsigned long long int factorCounter = 1;
-			factorTest = 1; //reset the factorTest
 			m_setPrimeFactor(number, ++factorTest, factorCounter);//start prime factorization with 2
 		}
 	}
 
-	const unsigned long long int getLCM(const unsigned long long int &number...) const
+	/*virtual const unsigned long long int m_getPrimeFactorsComposition()
+	{
+		if (m_primeFactors.empty())
+		{
+			std::cout << "Prime Factors Vector is empty." << std::endl;
+			return MIN_WHOLE_NUM;
+		}
+		else
+		{
+			const unsigned long long int compposedNumber = MIN_FACTOR;
+			for (int i = 0; i < m_primeFactors.size(); i++)
+			{
+				compposedNumber *= m_primeFactors[i];
+			}
+			return compposedNumber;
+		}
+	}*/
+
+	//TODO
+	const std::vector<unsigned long long int> getLeastCommonPrimeFactors(const WholeNumber &other)
+	{
+
+	}
+
+	//TODO rework
+	const std::vector<unsigned long long int> getCommonPrimeFactors(const WholeNumber &other) const
+	{
+		//m_primeFactors and other m_primefactors should be primefactorised
+		std::vector<unsigned long long int> commonPrimeFactors;
+		if (m_WholeNumber == MIN_WHOLE_NUM || other.getWholeNumber() == MIN_WHOLE_NUM)
+		{
+			std::cout << "Please provide a number greater then 0." << std::endl;
+			return commonPrimeFactors; //returning empty vector
+		}
+
+		if (m_WholeNumber == MIN_FACTOR || other.getWholeNumber() == MIN_FACTOR)
+			return commonPrimeFactors; //no common prime-factor returning empty vector
+
+		const std::vector<unsigned long long int> otherPrimeFactors = other.getPrimeFactors();
+		for (int i = 0; i < m_primeFactors.size(); i++)
+		{
+			for (int j = 0; j < otherPrimeFactors.size(); j++)
+			{
+				if (m_primeFactors[i] == otherPrimeFactors[j])
+				{
+					commonPrimeFactors.push_back(m_primeFactors[i]);
+					break;
+				}
+				if (m_primeFactors[i] < otherPrimeFactors[j])
+					break;
+				if (m_primeFactors[i] > otherPrimeFactors[j])
+					continue;
+			}
+		}
+		return commonPrimeFactors; //if no common prime factor was found, vector is empty
+	}
+
+	//TODO rework
+	const unsigned long long int getGreatestCommonFactor(const WholeNumber &other) const
+	{
+		if (m_WholeNumber == MIN_WHOLE_NUM )
+			return other.getWholeNumber();
+		if (other.getWholeNumber() == MIN_WHOLE_NUM))
+			return m_WholeNumber;
+
+		unsigned long long int commonFactor = MIN_FACTOR;
+		if (m_WholeNumber == MIN_FACTOR || other.getWholeNumber() == MIN_FACTOR)
+			return commonFactor;
+		
+		const std::vector<unsigned long long int> otherPrimeFactors = other.getPrimeFactors();
+		for (int i = 0; i < m_primeFactors.size(); i++)
+		{
+			for (int j = 0; j < otherPrimeFactors.size(); j++)
+			{
+				if (m_primeFactors[i] == otherPrimeFactors[j])
+				{
+					commonFactor *= m_primeFactors[i];
+					break;
+				}
+				if (m_primeFactors[i] < otherPrimeFactors[j])
+					break;
+				if (m_primeFactors[i] > otherPrimeFactors[j])
+					continue;
+			}
+		}
+		return commonFactor;
+	}
+
+	//Greates Common Factor Method
+	const unsigned long long int getLeastCommonMultiple(const WholeNumber &other) const
+	{
+		return (m_WholeNumber * other.getWholeNumber()) / getGreatestCommonFactor(other);
+	}
+
+	//TODO Prime Factorization Method
+	const unsigned long long int getLeastCommonMultiple(const WholeNumber &other) const
 	{
 	
 	}
-	
+
 	//Regrouping whole numbers
 	void regroupAs()
 	{
@@ -332,6 +441,12 @@ public:
 		m_Numerator.factorise();
 		m_Denominator.factorise();
 	}
+
+	void primeFactorise()
+	{
+		m_Numerator.primeFactorise();
+		m_Denominator.primeFactorise();
+	}
 };
 
 class IrrationalNumber
@@ -342,5 +457,63 @@ public:
 	IrrationalNumber(long double irr)
 	{
 		//TODO check if irrational
+	}
+};
+
+
+class GCF : public WholeNumber
+{
+protected:
+	WholeNumber *p_numbers;
+public:
+
+	GCF()
+		:p_numbers(nullptr)
+	{
+
+	}
+
+	GCF(const unsigned int size, ...)
+	{
+		set(size, ...);
+	}
+
+	~GCF()
+	{
+		delete[] p_numbers;
+	}
+
+	void set(const unsigned int size, ...)//only unsigned long long int data type
+	{
+		p_numbers = new WholeNumber[size];
+		va_list(args);
+		va_start(args, size);
+
+		for (int i = 0; i < size; i++)
+		{
+			const unsigned long long int number = va_arg(args, const unsigned long long int);
+			p_numbers[i].set(number);
+			p_numbers[i].primeFactorise();
+		}
+		va_end(args);
+	}
+
+
+
+};
+
+class LCM : public GCF
+{
+
+public:
+	LCM()
+		:p_numbers(nullptr)
+	{
+
+	}
+
+	LCM(const unsigned int size, ...)
+	{
+		set(const unsigned int size, ...);
 	}
 };

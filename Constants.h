@@ -10,3 +10,4 @@
 #define MIN_PRIME_NR	2
 #define BASE_10			10
 #define PI				3.14159265359
+

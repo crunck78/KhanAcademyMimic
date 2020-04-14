@@ -1,6 +1,12 @@
 #pragma once
 
 template<typename Number>
+Number getSumOf(Number a, Number b)
+{
+	return a + b;
+}
+
+template<typename Number>
 bool isPossitive(const Number a)
 {
 	return (a > 0);
