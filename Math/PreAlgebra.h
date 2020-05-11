@@ -20,10 +20,7 @@ protected:
 public:
 
 	WholeNumber()
-		:m_WholeNumber(MIN_WHOLE_NUM)
-		{
-		
-		}
+		:m_WholeNumber(MIN_WHOLE_NUM) {}
 
 	WholeNumber(const unsigned long long int number)
 	{
@@ -209,9 +206,9 @@ public:
 			return commonPrimeFactors; //no common prime-factor returning empty vector
 
 		const std::vector<unsigned long long int> otherPrimeFactors = other.getPrimeFactors();
-		for (int i = 0; i < m_primeFactors.size(); i++)
+		for (unsigned int i = 0; i < m_primeFactors.size(); i++)
 		{
-			for (int j = 0; j < otherPrimeFactors.size(); j++)
+			for (unsigned int j = 0; j < otherPrimeFactors.size(); j++)
 			{
 				if (m_primeFactors[i] == otherPrimeFactors[j])
 				{
@@ -232,7 +229,7 @@ public:
 	{
 		if (m_WholeNumber == MIN_WHOLE_NUM )
 			return other.getWholeNumber();
-		if (other.getWholeNumber() == MIN_WHOLE_NUM))
+		if (other.getWholeNumber() == MIN_WHOLE_NUM)
 			return m_WholeNumber;
 
 		unsigned long long int commonFactor = MIN_FACTOR;
@@ -240,9 +237,9 @@ public:
 			return commonFactor;
 		
 		const std::vector<unsigned long long int> otherPrimeFactors = other.getPrimeFactors();
-		for (int i = 0; i < m_primeFactors.size(); i++)
+		for (unsigned int i = 0; i < m_primeFactors.size(); i++)
 		{
-			for (int j = 0; j < otherPrimeFactors.size(); j++)
+			for (unsigned int j = 0; j < otherPrimeFactors.size(); j++)
 			{
 				if (m_primeFactors[i] == otherPrimeFactors[j])
 				{
@@ -265,10 +262,6 @@ public:
 	}
 
 	//TODO Prime Factorization Method
-	const unsigned long long int getLeastCommonMultiple(const WholeNumber &other) const
-	{
-	
-	}
 
 	//Regrouping whole numbers
 	void regroupAs()
@@ -348,10 +341,7 @@ protected:
 public:
 
 	Integer()
-		:m_Integer(MIN_WHOLE_NUM)
-	{
-
-	}
+		:m_Integer(MIN_WHOLE_NUM) {}
 
 	Integer(long long int number)
 	{
@@ -447,6 +437,18 @@ public:
 		m_Numerator.primeFactorise();
 		m_Denominator.primeFactorise();
 	}
+
+	const RationalNumber getEquivalent(const RationalNumber &other)
+	{
+		//TODO
+		return other; //
+	}
+
+	bool isEquivalent(const RationalNumber &other)
+	{
+		//TODO
+		return false;//(this->m_Numerator * other.m_Denominator) == (this->m_Denominator * other.m_Numerator);
+	}
 };
 
 class IrrationalNumber
@@ -460,7 +462,7 @@ public:
 	}
 };
 
-
+/*
 class GCF : public WholeNumber
 {
 protected:
@@ -489,7 +491,7 @@ public:
 		va_list(args);
 		va_start(args, size);
 
-		for (int i = 0; i < size; i++)
+		for (unsigned int i = 0; i < size; i++)
 		{
 			const unsigned long long int number = va_arg(args, const unsigned long long int);
 			p_numbers[i].set(number);
@@ -497,23 +499,20 @@ public:
 		}
 		va_end(args);
 	}
-
-
-
 };
 
+/*
 class LCM : public GCF
 {
 
 public:
 	LCM()
-		:p_numbers(nullptr)
 	{
-
+		p_numbers = nullptr;
 	}
 
 	LCM(const unsigned int size, ...)
 	{
 		set(const unsigned int size, ...);
 	}
-};
+};*/
