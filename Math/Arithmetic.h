@@ -105,6 +105,46 @@ const unsigned int getLeastCommonMultiple(const unsigned int a, const unsigned i
 	return aMultiple;
 }
 
+//TODO
+const unsigned int getGreatestCommonDivisor(const unsigned int a, const unsigned int b)
+{
+	unsigned int gcd = 1; //smallest common divisor
+	unsigned int biggerDivisor;
+	unsigned int smallerDivisor;
+	
+	if(a > b)
+	{
+		biggerDivisor = a;
+		smallerDivisor = b;
+	}
+	else
+	{
+		biggerDivisor = b;
+		smallerDivisor = a;
+	}
+	
+	if( isDivisible(biggerDivisor, smallerDivisor))
+	{
+		gcd = smallerDivisor;
+	}
+	else
+	{
+		unsigned int divisorTest = 2;// smallest prime factor
+		while(divisorTest < smallerDivisor)
+		{
+			if(isDivisible(biggerDivisor,divisorTest) && isDivisible(smallerDivisor,divisorTest))
+			{
+				gcd *= divisorTest;
+				biggerDivisor /= divisorTest;
+				smallerDivisor /= divisorTest;
+			}
+			else
+				divisorTest++;
+		}
+	}
+	return gcd;
+}
+
 template<typename Number>
 const Number getResult(const Number &a, const Number &b, const char operation)
 {
@@ -508,63 +548,9 @@ public:
 	const Fraction getSimplification()
 	{
 		Fraction simplification;
-		int smallestDivisor;
-		int biggerDivisor;
-		if (isImproper())
-		{
-			smallestDivisor = m_denominator;
-			biggerDivisor = getAbsoluteValue(m_numerator);
-		}
-		else
-		{
-			smallestDivisor = getAbsoluteValue(m_numerator);
-			biggerDivisor = m_denominator;
-		}
-
-		if (isDivisible(biggerDivisor, smallestDivisor))
-		{
-			simplification.set(m_numerator / smallestDivisor, m_denominator / smallestDivisor);
-		}
-
+		int gcd = getGreatestCommonDivisor(getAbsoluteValue(m_numerator), m_denominator);
+		simplification.set(m_numerator / gcd, m_denominator / gcd );
 		return simplification;
-	}
-
-	//TODO
-	void simplify()
-	{
-		int smallestDivisor;
-		int biggerDivisor;
-		if (isImproper())
-		{
-			smallestDivisor = m_denominator;
-			biggerDivisor = getAbsoluteValue(m_numerator);
-		}
-		else
-		{
-			smallestDivisor = getAbsoluteValue(m_numerator);
-			biggerDivisor = m_denominator;
-		}
-
-		if (isDivisible(biggerDivisor, smallestDivisor))
-		{
-			m_numerator /= smallestDivisor;
-			m_denominator /= smallestDivisor;
-		}
-		else
-		{
-			int factorTest = 2;//smallest prime Number
-			while (factorTest < smallestDivisor)
-			{
-				if (isDivisible(biggerDivisor, factorTest) && isDivisible(smallestDivisor, factorTest))
-				{
-					m_numerator /= factorTest;
-					m_denominator /= factorTest;
-					smallestDivisor /= factorTest;
-				}
-				else
-					factorTest++;
-			}
-		}
 	}
 
 	bool isUndefined()

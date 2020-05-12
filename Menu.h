@@ -1,8 +1,8 @@
 #pragma once
 #include <stdlib.h>
 #include <iostream>
-#include "Input\Input.h"
-#include "Math\Arithmetic.h"
+#include "Input/Input.h"
+#include "Math/Arithmetic.h"
 
 #define APP_NAME "KHAN ACADEMY"
 #define EXIT 0
