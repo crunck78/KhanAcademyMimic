@@ -523,9 +523,9 @@ public:
 	friend void toCommonDenominators(Fraction &lhs, Fraction &rhs)
 	{
 		//find smallest common multiple of the fractions denominators
-		const unsigned int commonDenominator = getLeastCommonMultiple(lhs.m_denominator, rhs.m_denominator);
+		const int commonDenominator = (int)getLeastCommonMultiple(lhs.m_denominator, rhs.m_denominator);
 
-		//first set the numerators(we need the ooriginal denominator unchanged to set the correct numerator)
+		//first set the numerators(we need the original denominator unchanged to set the correct numerator)
 		lhs.m_numerator *= commonDenominator / lhs.m_denominator;
 		rhs.m_numerator *= commonDenominator / rhs.m_denominator;
 
@@ -569,32 +569,33 @@ public:
 	}
 };
 
-class MixedNumber : public Fraction
+class MixedNumber
 {
 private:
 	int m_wholePart;
+	Fraction m_proper;
 public:
 	MixedNumber()
-		:Fraction(), m_wholePart(0) {}
+		:m_wholePart(0), m_proper(0) {}
 
-	MixedNumber(const Fraction &improperFraction)
-		:Fraction(improperFraction.getRemainder(), improperFraction.getDenominator()), m_wholePart(improperFraction.getResult()) {}
+	MixedNumber(const Fraction &improper)
+		:m_wholePart(improper.getResult()), m_proper(improper.getRemainder(), improper.getDenominator()) {}
 
 	MixedNumber(const MixedNumber &other)
 	{
 		m_wholePart = other.m_wholePart;
-		this->set(other.getNumerator(), other.getDenominator());
+		m_proper = other.m_proper;
 	}
 
 	const Fraction getImproperFraction() const
 	{
 		Fraction improper;
-		const int numerator = m_wholePart * this->getDenominator() + this->getNumerator();
-		improper.set(numerator, this->getDenominator());
+		const int numerator = m_wholePart * m_proper.getDenominator() + m_proper.getNumerator();
+		improper.set(numerator, m_proper.getDenominator());
 		return improper;
 	}
 
-	const MixedNumber getMixedNumberFrom(const Fraction &improper)
+	const MixedNumber getMixedNumber(const Fraction &improper)
 	{
 		const MixedNumber converted(improper);
 		return converted;
@@ -604,24 +605,13 @@ public:
 	{
 		std::cout << "Enter Whole Part:";
 		is >> obj.m_wholePart;
-		int n, d;
-		std::cout << "Enter numerator: ";
-		is >> n;
-		std::cout << "Enter denominator: ";
-		is >> d;
-		while (d == 0)
-		{
-			std::cout << "Fraction is undefinde if denominator equals to 0!" << std::endl;
-			std::cout << "Enter denominator: ";
-			is >> d;
-		}
-		obj.set(n, d);
+		is >> obj.m_proper;
 		return is;
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const MixedNumber &obj)
 	{
-		os << obj.m_wholePart << '(' << obj.getNumerator() << '/' << obj.getDenominator() << ')';
+		os << obj.m_wholePart << '(' << obj.m_proper << ')';
 		return os;
 	}
 };
