@@ -586,6 +586,29 @@ public:
 		m_wholePart = other.m_wholePart;
 		m_proper = other.m_proper;
 	}
+	
+	//TODO
+	MixedNumber& operator=(const MixedNumber &rhs)
+	{
+		if (this != &rhs)
+		{
+			//TODO
+			this->m_wholePart = rhs.m_wholePart;
+			this->m_proper = rhs.m_proper;
+		}
+		return *this;
+	}
+	
+	//TODO
+	MixedNumber& operator+=(const MixedNumber &rhs)
+	{
+		Fraction improper = Fraction(this->m_wholePart) + this->m_proper + Fraction(rhs.m_wholePart) + rhs.m_proper;
+		*this = MixedNumber(improper);
+		/*this->m_wholePart += rhs.m_wholePart;
+		this->m_proper += rhs.m_proper;*/
+		return *this;
+	}
+	
 
 	const Fraction getImproperFraction() const
 	{
@@ -605,6 +628,7 @@ public:
 	{
 		std::cout << "Enter Whole Part:";
 		is >> obj.m_wholePart;
+		std::cout << "Enter Proper Fraction:";
 		is >> obj.m_proper;
 		return is;
 	}
