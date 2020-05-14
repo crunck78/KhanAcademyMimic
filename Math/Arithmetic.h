@@ -591,23 +591,18 @@ public:
 		m_proper = other.m_proper;
 	}
 	
-	//TODO
 	MixedNumber& operator=(const MixedNumber &rhs)
 	{
 		if (this != &rhs)
 		{
-			//TODO
 			this->m_wholePart = rhs.m_wholePart;
 			this->m_proper = rhs.m_proper;
 		}
 		return *this;
 	}
 	
-	//TODO
 	MixedNumber& operator+=(const MixedNumber &rhs)
 	{
-		/*Fraction improper = Fraction(this->m_wholePart) + this->m_proper + Fraction(rhs.m_wholePart) + rhs.m_proper;
-		*this = MixedNumber(improper);*/
 		this->m_wholePart += rhs.m_wholePart;
 		this->m_proper += rhs.m_proper;
 		return *this;
@@ -619,11 +614,8 @@ public:
 		return lhs;
 	}
 	
-	
 	MixedNumber& operator-=(const MixedNumber &rhs)
 	{
-		/*Fraction improper = (Fraction(this->m_wholePart) + this->m_proper) - (Fraction(rhs.m_wholePart) + rhs.m_proper);
-		*this = MixedNumber(improper);*/
 		this->m_wholePart -= rhs.m_wholePart;
 		this->m_proper -= rhs.m_proper;
 		return *this;
@@ -640,7 +632,6 @@ public:
 		return MixedNumber(-this->m_wholePart, -this->m_proper);
 	}
 	
-	//TODO
 	MixedNumber& operator++()
 	{
 		this->m_wholePart++;
@@ -667,8 +658,7 @@ public:
 	
 	MixedNumber& operator*=(const MixedNumber &rhs)
 	{
-		//TODO
-		
+		*this = MixedNumber(this->getImproperFraction() * rhs.getImproperFraction());
 		return *this;
 	}
 
@@ -680,7 +670,7 @@ public:
 	
 	MixedNumber& operator/=(const MixedNumber &rhs)
 	{
-		//TODO
+		*this = MixedNumber(this->getImproperFraction() / rhs.getImproperFraction());
 		return *this;
 	}
 
@@ -689,6 +679,23 @@ public:
 		lhs /= rhs;
 		return lhs;
 	}
+
+	friend bool operator==(const MixedNumber &lhs, const MixedNumber &rhs)
+	{
+		return lhs.getImproperFraction() == rhs.getImproperFraction();
+	}
+
+	friend bool operator!=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator==(lhs, rhs); }
+
+	//TODO
+	friend bool operator< (const MixedNumber &lhs, const MixedNumber &rhs)
+	{
+		return lhs.getImproperFraction() < rhs.getImproperFraction();
+	}
+
+	friend bool operator> (const MixedNumber &lhs, const MixedNumber &rhs) { return operator< (rhs, lhs); }
+	friend bool operator<=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator> (lhs, rhs); }
+	friend bool operator>=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator< (lhs, rhs); }
 
 	const Fraction getImproperFraction() const
 	{
