@@ -366,12 +366,12 @@ public:
 	{
 		if (this->m_denominator != rhs.m_denominator)
 		{
-			Fraction commonDenominator = rhs;
-			toCommonDenominators(*this, commonDenominator);
-			this->m_numerator = this->m_numerator + commonDenominator.m_numerator;
+			const int leastCommonDenominator = (int)getLeastCommonMultiple(this->m_denominator, rhs.m_denominator);
+			this->m_numerator = (this->m_numerator * leastCommonDenominator / this->m_denominator) + (rhs.m_numerator * leastCommonDenominator / rhs.m_denominator);
+			this->m_denominator = leastCommonDenominator;
 		}
 		else
-			this->m_numerator = this->m_numerator + rhs.m_numerator;
+			this->m_numerator += rhs.m_numerator;
 		return *this;
 	}
 
@@ -385,12 +385,12 @@ public:
 	{
 		if (this->m_denominator != rhs.m_denominator)
 		{
-			Fraction commonDenominator = rhs;
-			toCommonDenominators(*this, commonDenominator);
-			this->m_numerator = this->m_numerator - commonDenominator.m_numerator;
+			const int leastCommonDenominator = (int)getLeastCommonMultiple(this->m_denominator, rhs.m_denominator);
+			this->m_numerator = (this->m_numerator * leastCommonDenominator / this->m_denominator) - (rhs.m_numerator * leastCommonDenominator / rhs.m_denominator);
+			this->m_denominator = leastCommonDenominator;
 		}
 		else
-			this->m_numerator = this->m_numerator - rhs.m_numerator;
+			this->m_numerator -= rhs.m_numerator;
 		return *this;
 	}
 
@@ -402,30 +402,30 @@ public:
 
 	Fraction operator-()
 	{
-		return Fraction(-this->m_numerator);
+		return Fraction(-this->m_numerator, this->m_denominator);
 	}
 
 	Fraction& operator++()
 	{
-		this->m_numerator++;
+		this->m_numerator += this->m_denominator;
 		return *this;
 	}
 
 	Fraction& operator++(int)
 	{
-		this->m_numerator++;
+		this->m_numerator += this->m_denominator;
 		return *this;
 	}
 
 	Fraction& operator--()
 	{
-		this->m_numerator--;
+		this->m_numerator -= this->m_denominator;
 		return *this;
 	}
 
 	Fraction& operator--(int)
 	{
-		this->m_numerator--;
+		this->m_numerator -= this->m_denominator;
 		return *this;
 	}
 
@@ -481,6 +481,7 @@ public:
 		return os;
 	}
 
+	//USE INPUT HELP CLASS TO SET FRACTION CORRECT
 	friend std::istream& operator>>(std::istream& is, Fraction &obj)
 	{
 		std::cout << "Enter numerator: ";
@@ -523,15 +524,15 @@ public:
 	friend void toCommonDenominators(Fraction &lhs, Fraction &rhs)
 	{
 		//find smallest common multiple of the fractions denominators
-		const int commonDenominator = (int)getLeastCommonMultiple(lhs.m_denominator, rhs.m_denominator);
+		const int leastCommonDenominator = (int)getLeastCommonMultiple(lhs.m_denominator, rhs.m_denominator);
 
 		//first set the numerators(we need the original denominator unchanged to set the correct numerator)
-		lhs.m_numerator *= commonDenominator / lhs.m_denominator;
-		rhs.m_numerator *= commonDenominator / rhs.m_denominator;
+		lhs.m_numerator *= leastCommonDenominator / lhs.m_denominator;
+		rhs.m_numerator *= leastCommonDenominator / rhs.m_denominator;
 
 		//second set the denominators
-		lhs.m_denominator = commonDenominator;
-		rhs.m_denominator = commonDenominator;
+		lhs.m_denominator = leastCommonDenominator;
+		rhs.m_denominator = leastCommonDenominator;
 	}
 
 	const int getResult() const
@@ -548,7 +549,7 @@ public:
 	const Fraction getSimplification()
 	{
 		Fraction simplification;
-		int gcd = getGreatestCommonDivisor(getAbsoluteValue(m_numerator), m_denominator);
+		int gcd = (int)getGreatestCommonDivisor(getAbsoluteValue(m_numerator), m_denominator);
 		simplification.set(m_numerator / gcd, m_denominator / gcd );
 		return simplification;
 	}
@@ -577,6 +578,9 @@ private:
 public:
 	MixedNumber()
 		:m_wholePart(0), m_proper(0) {}
+		
+	MixedNumber( const int wp, const Fraction &proper)
+		:m_wholePart(wp), m_proper(proper) {}
 
 	MixedNumber(const Fraction &improper)
 		:m_wholePart(improper.getResult()), m_proper(improper.getRemainder(), improper.getDenominator()) {}
@@ -602,13 +606,89 @@ public:
 	//TODO
 	MixedNumber& operator+=(const MixedNumber &rhs)
 	{
-		Fraction improper = Fraction(this->m_wholePart) + this->m_proper + Fraction(rhs.m_wholePart) + rhs.m_proper;
-		*this = MixedNumber(improper);
-		/*this->m_wholePart += rhs.m_wholePart;
-		this->m_proper += rhs.m_proper;*/
+		/*Fraction improper = Fraction(this->m_wholePart) + this->m_proper + Fraction(rhs.m_wholePart) + rhs.m_proper;
+		*this = MixedNumber(improper);*/
+		this->m_wholePart += rhs.m_wholePart;
+		this->m_proper += rhs.m_proper;
 		return *this;
 	}
 	
+	friend MixedNumber operator+(MixedNumber lhs, const MixedNumber &rhs)
+	{
+		lhs += rhs;
+		return lhs;
+	}
+	
+	
+	MixedNumber& operator-=(const MixedNumber &rhs)
+	{
+		/*Fraction improper = (Fraction(this->m_wholePart) + this->m_proper) - (Fraction(rhs.m_wholePart) + rhs.m_proper);
+		*this = MixedNumber(improper);*/
+		this->m_wholePart -= rhs.m_wholePart;
+		this->m_proper -= rhs.m_proper;
+		return *this;
+	}
+	
+	friend MixedNumber operator-(MixedNumber lhs, const MixedNumber &rhs)
+	{
+		lhs -= rhs;
+		return lhs;
+	}
+	
+	MixedNumber operator-()
+	{
+		return MixedNumber(-this->m_wholePart, -this->m_proper);
+	}
+	
+	//TODO
+	MixedNumber& operator++()
+	{
+		this->m_wholePart++;
+		return *this;
+	}
+	
+	MixedNumber& operator++(int)
+	{
+		this->m_wholePart++;
+		return *this;
+	}
+	
+	MixedNumber& operator--()
+	{
+		this->m_wholePart--;
+		return *this;
+	}
+	
+	MixedNumber& operator--(int)
+	{
+		this->m_wholePart--;
+		return *this;
+	}
+	
+	MixedNumber& operator*=(const MixedNumber &rhs)
+	{
+		//TODO
+		
+		return *this;
+	}
+
+	friend MixedNumber operator*(MixedNumber lhs, const MixedNumber &rhs)
+	{
+		lhs *= rhs;
+		return lhs;
+	}
+	
+	MixedNumber& operator/=(const MixedNumber &rhs)
+	{
+		//TODO
+		return *this;
+	}
+
+	friend MixedNumber operator/(MixedNumber lhs, const MixedNumber &rhs)
+	{
+		lhs /= rhs;
+		return lhs;
+	}
 
 	const Fraction getImproperFraction() const
 	{
@@ -624,6 +704,7 @@ public:
 		return converted;
 	}
 
+	//USE INPUT HELP CLASS TO SET FRACTION CORRECT
 	friend std::istream& operator>>(std::istream& is, MixedNumber &obj)
 	{
 		std::cout << "Enter Whole Part:";
