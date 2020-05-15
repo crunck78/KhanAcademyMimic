@@ -1,4 +1,4 @@
-#pragma once
+#pragma once 
 #include <iostream>
 
 //ASCII CODE FOR MATHEMATICAL OPERATIONS
@@ -342,6 +342,16 @@ public:
 		:m_numerator(0), m_denominator(1) {}
 	Fraction(const int n)
 		:m_numerator(n), m_denominator(1) {}
+	Fraction(const float n)
+	:m_numerator(n), m_denominator(1)
+	{
+		//TODO
+		while( (n * m_denominator) - m_numerator != 0)
+		{
+			m_denominator *= 10; //next decimal place
+			m_numerator = n * m_denominator; // next decimal value
+		}
+	}
 
 	Fraction(const int n, const int d)
 	{
@@ -586,6 +596,13 @@ public:
 		
 	MixedNumber(const int  wp)
 		:m_wholePart(wp), m_proper(0) {}
+		
+	//TODO
+	MixedNumber(const float n)
+		:m_wholePart(n)
+	{
+		m_proper = Fraction( n - m_wholePart );
+	}
 		
 	MixedNumber( const int wp, const Fraction &proper)
 		:m_wholePart(wp), m_proper(proper) {}
