@@ -181,6 +181,16 @@ BinaryOperation<Fraction> K_fraction_division("DIVISION", DIVISION);
 UnaryOperation<Fraction> K_fraction_opposite("OPPOSITE", OPPOSITE);
 UnaryOperation<Fraction> K_fraction_absolute("ABSOLUTE VALUE", ABSOLUTE);
 CommonDenominators K_fraction_common_denominators("COMMON DENOMINATORS");
+Menu K_mixedNumbers("Mixed Numbers");
+
+//Options for Menu MixedNumbers
+BinaryOperation<MixedNumber> K_mixedNumbers_addition("ADDITION", ADDITION);
+BinaryOperation<MixedNumber> K_mixedNumbers_substraction("SUBSTRACTION", SUBSTRACTION);
+BinaryOperation<MixedNumber> K_mixedNumbers_multiplication("MULTIPLICATION", MULTIPLICATION);
+BinaryOperation<MixedNumber> K_mixedNumbers_division("DIVISION", DIVISION);
+UnaryOperation<MixedNumber> K_mixedNumbers_opposite("OPPOSITE", OPPOSITE);
+UnaryOperation<MixedNumber> K_mixedNumbers_absolute("ABSOLUTE VALUE", ABSOLUTE);
+
 
 void initMenuTree()
 {
@@ -200,15 +210,23 @@ void initMenuTree()
 	const std::vector<Menu*> K_remainderDivisionOptions = { &K_arithmetic };
 	const std::vector<Menu*> K_oppositeOptions = { &K_arithmetic };
 	const std::vector<Menu*> K_absoluteOptions = { &K_arithmetic };
-	const std::vector<Menu*> K_fractionsOptions = { &K_arithmetic,  &K_fraction_addition, &K_fraction_substraction, &K_fraction_multiplication, &K_fraction_division, &K_fraction_opposite, &K_fraction_absolute, &K_fraction_common_denominators};
+	const std::vector<Menu*> K_fractionsOptions = { &K_arithmetic,  &K_fraction_addition, &K_fraction_substraction, &K_fraction_multiplication, &K_fraction_division, &K_fraction_opposite, &K_fraction_absolute, &K_fraction_common_denominators, &K_mixedNumbers};
 
 	const std::vector<Menu*> K_fraction_additionOptions = { &K_fractions };
 	const std::vector<Menu*> K_fraction_substractionOptions = { &K_fractions };
 	const std::vector<Menu*> K_fraction_multiplicationOptions = { &K_fractions };
-	const std::vector<Menu*> K_fractiom_divisionOptions = { &K_fractions };
+	const std::vector<Menu*> K_fraction_divisionOptions = { &K_fractions };
 	const std::vector<Menu*> K_fraction_oppositeOptions = { &K_fractions };
 	const std::vector<Menu*> K_fraction_absoluteOptions = { &K_fractions };
 	const std::vector<Menu*> K_fraction_commonDenominatorsOpptions = { &K_fractions };
+	const std::vector<Menu*> K_mixedNumbersOptions = { &K_fractions, &K_mixedNumbers_addition, &K_mixedNumbers_substraction, &K_mixedNumbers_multiplication, &K_mixedNumbers_division, &K_mixedNumbers_opposite, &K_mixedNumbers_absolute};
+	
+	const std::vector<Menu*> K_mixedNumbers_additionOptions = { &K_mixedNumbers };
+	const std::vector<Menu*> K_mixedNumbers_substractionOptions = { &K_mixedNumbers };
+	const std::vector<Menu*> K_mixedNumbers_multiplicationOptions = { &K_mixedNumbers };
+	const std::vector<Menu*> K_mixedNumbers_divisionOptions = { &K_mixedNumbers };
+	const std::vector<Menu*> K_mixedNumbers_oppositeOptions = { &K_mixedNumbers };
+	const std::vector<Menu*> K_mixedNumbers_absoluteOptions = { &K_mixedNumbers };
 
 	K_main.setOptions(K_mainOptions);
 
@@ -230,8 +248,16 @@ void initMenuTree()
 	K_fraction_addition.setOptions(K_fraction_additionOptions);
 	K_fraction_substraction.setOptions(K_fraction_substractionOptions);
 	K_fraction_multiplication.setOptions(K_fraction_multiplicationOptions);
-	K_fraction_division.setOptions(K_fractiom_divisionOptions);
+	K_fraction_division.setOptions(K_fraction_divisionOptions);
 	K_fraction_opposite.setOptions(K_fraction_oppositeOptions);
 	K_fraction_absolute.setOptions(K_fraction_absoluteOptions);
 	K_fraction_common_denominators.setOptions(K_fraction_commonDenominatorsOpptions);
+	K_mixedNumbers.setOptions(K_mixedNumbersOptions);
+	
+	K_mixedNumbers_addition.setOptions(K_mixedNumbers_additionOptions);
+	K_mixedNumbers_substraction.setOptions(K_mixedNumbers_substractionOptions);
+	K_mixedNumbers_multiplication.setOptions(K_mixedNumbers_multiplicationOptions);
+	K_mixedNumbers_division.setOptions(K_mixedNumbers_divisionOptions);
+	K_mixedNumbers_opposite.setOptions(K_mixedNumbers_oppositeOptions);
+	K_mixedNumbers_absolute.setOptions(K_mixedNumbers_absoluteOptions);
 }

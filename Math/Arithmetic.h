@@ -544,7 +544,12 @@ public:
 	{
 		return (m_numerator % m_denominator);
 	}
-
+	
+	const float getDecimal() const
+	{
+		return (float)m_numerator / (float)m_denominator;
+	}
+	
 	//TODO
 	const Fraction getSimplification()
 	{
@@ -578,6 +583,9 @@ private:
 public:
 	MixedNumber()
 		:m_wholePart(0), m_proper(0) {}
+		
+	MixedNumber(const int  wp)
+		:m_wholePart(wp), m_proper(0) {}
 		
 	MixedNumber( const int wp, const Fraction &proper)
 		:m_wholePart(wp), m_proper(proper) {}
@@ -705,7 +713,7 @@ public:
 		return improper;
 	}
 
-	const MixedNumber getMixedNumber(const Fraction &improper)
+	friend const MixedNumber getMixedNumber(const Fraction &improper)
 	{
 		const MixedNumber converted(improper);
 		return converted;
@@ -726,4 +734,18 @@ public:
 		os << obj.m_wholePart << '(' << obj.m_proper << ')';
 		return os;
 	}
+};
+
+class Decimal
+{
+private:
+	float m_decimal;
+public:
+	Decimal()
+		:m_decimal(0.0f) {}
+	Decimal(const float dec)
+		:m_decimal(dec) {}
+	Decimal(const Fraction &frac)
+		:m_decimal(frac.getDecimal()) {}//TODO GETDECIMAL
+		
 };
