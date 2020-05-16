@@ -599,9 +599,8 @@ public:
 		
 	//TODO
 	MixedNumber(const float n)
-		:m_wholePart(n)
 	{
-		m_proper = Fraction( n - m_wholePart );
+		*this = MixedNumber(Fraction(n));
 	}
 		
 	MixedNumber( const int wp, const Fraction &proper)
