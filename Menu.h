@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Input/Input.h"
 #include "Math/Arithmetic.h"
+#include "Math/BasicGeometry.h"
 
 #define APP_NAME "KHAN ACADEMY"
 #define EXIT 0

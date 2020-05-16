@@ -12,10 +12,7 @@ private:
 	
 public:
 	Point2d(long double x = 0, long double y = 0)
-		: m_x(x), m_y(y)
-	{
-
-	}
+		: m_x(x), m_y(y) {}
 
 	void init(long double x, long double y)
 	{
@@ -33,17 +30,17 @@ public:
 		m_y = y;
 	}
 
-	long double getX()
+	const long double getX() const 
 	{
 		return m_x;
 	}
 	
-	long double getY()
+	const long double getY() const 
 	{
 		return m_y;
 	}
 
-	long double getDistanceFrom(Point2d other)
+	const long double getDistanceFrom(const Point2d &other)
 	{
 		return hypot( (other.getX() - m_x), (other.getY() - m_y));
 	}

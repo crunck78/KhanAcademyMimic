@@ -560,7 +560,6 @@ public:
 		return (float)m_numerator / (float)m_denominator;
 	}
 	
-	//TODO
 	const Fraction getSimplification()
 	{
 		Fraction simplification;
@@ -597,7 +596,6 @@ public:
 	MixedNumber(const int  wp)
 		:m_wholePart(wp), m_proper(0) {}
 		
-	//TODO
 	MixedNumber(const float n)
 	{
 		*this = MixedNumber(Fraction(n));
@@ -734,6 +732,11 @@ public:
 		const MixedNumber converted(improper);
 		return converted;
 	}
+	
+	const float getDecimal() const
+	{
+		return (float)m_wholePart + m_proper.getDecimal();
+	}
 
 	//USE INPUT HELP CLASS TO SET FRACTION CORRECT
 	friend std::istream& operator>>(std::istream& is, MixedNumber &obj)
@@ -761,7 +764,10 @@ public:
 		:m_decimal(0.0f) {}
 	Decimal(const float dec)
 		:m_decimal(dec) {}
+	Decimal(const int n)
+		:m_decimal(n) {}
 	Decimal(const Fraction &frac)
-		:m_decimal(frac.getDecimal()) {}//TODO GETDECIMAL
-		
+		:m_decimal(frac.getDecimal()) {}
+	Decimal(const MixedNumber &mn)
+		:m_decimal(mn.getDecimal()) {}
 };
