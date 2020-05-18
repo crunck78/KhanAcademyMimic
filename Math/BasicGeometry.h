@@ -4,28 +4,44 @@
 #include "Arithmetic.h"
 #include <math.h>
 
-class Point2d{
+class Point2d
+{
 	
 private:
 	long double m_x;
 	long double m_y;
 	
 public:
-	Point2d(long double x = 0, long double y = 0)
+	Point2d()
+		: m_x(0), m_y(0) {}
+
+	Point2d(const long double x, const long double y)
 		: m_x(x), m_y(y) {}
 
-	void init(long double x, long double y)
+	Point2d(const Point2d &other)
+	{
+		this->init(other.m_x, other.m_y);
+	}
+
+	Point2d& operator=(const Point2d &other)
+	{
+		if(this != &other)
+			this->init(other.m_x, other.m_y);
+		return *this;
+	}
+
+	void init(const long double x, const long double y)
 	{
 		setX(x);
 		setY(y);
 	}
 
-	void setX(long double x)
+	void setX(const long double x)
 	{
 		m_x = x;
 	}
 
-	void setY(long double y)
+	void setY(const long double y)
 	{
 		m_y = y;
 	}
@@ -45,28 +61,26 @@ public:
 		return hypot( (other.getX() - m_x), (other.getY() - m_y));
 	}
 
-	// need rework
-	/*
-	Point2d getMidPointFrom(Point2d& other)
+	const Point2d getMidPointFrom(const Point2d& other) const
 	{
 		Point2d midPoint;
-		midPoint.setX(midValue(m_x, other.getX());
-		midPoint.setY(midValue(m_y, other.getY());
+		midPoint.setX(midValue(this->m_x, other.m_x));
+		midPoint.setY(midValue(this->m_y, other.m_y));
 		return midPoint;
-	}*/
+	}
 	
-	void translate( long double x, long double y )
+	void translate( const long double x, const long double y )
 	{
 		m_x += x;
 		m_y += y;
 	}
 
-	void rotate(const Point2d& center, long double angle)
+	void rotate(const Point2d& center, const long double angle)
 	{
 		//TODO
 	}
 
-	void reflectOver(long double reflectionLineSlope)
+	void reflectOver(const long double reflectionLineSlope)
 	{
 		//TODO 
 		/*
@@ -76,7 +90,7 @@ public:
 	}
 };
 
-class Line{
+class Segment{
 
 private:
 	Point2d m_endPoints[2], m_midPoint;
@@ -85,7 +99,7 @@ private:
 	
 public:
 	//constructor rework need
-	Line()
+	Segment()
 	{
 		m_endPoints[0].init(-0.5f, 0.0f);
 		m_endPoints[1].init(0.5f, 0.0f);
@@ -94,7 +108,7 @@ public:
 		m_setMidPoint();
 	}
 
-	Line(const long double endPoint1[], const long double endPoint2[])
+	Segment(const long double endPoint1[], const long double endPoint2[])
 	{
 		m_endPoints[0].init(endPoint1[0], endPoint1[1]);
 		m_endPoints[1].init(endPoint2[0], endPoint2[1]);
@@ -103,7 +117,7 @@ public:
 		m_setMidPoint();
 	}
 
-	Line(const Point2d& endPoint1, const Point2d& endPoint2)
+	Segment(const Point2d& endPoint1, const Point2d& endPoint2)
 	{
 		m_endPoints[0] = endPoint1;
 		m_endPoints[1] = endPoint2;
@@ -112,7 +126,7 @@ public:
 		m_setMidPoint();
 	}
 
-	void setEndPoint(const Point2d point, int index)
+	void setEndPoint(const Point2d point, const int index)
 	{
 		//TODO guard against invalid index
 		m_endPoints[index] = point;
@@ -121,45 +135,50 @@ public:
 		m_setMidPoint();
 	}
 
-	Point2d getEndPoint(int index)
+	const Point2d getEndPoint(const int index) const
 	{
 		//TODO guard against invalid index
 		return m_endPoints[index];
 	}
 
-	Point2d getMidPoint()
+	const Point2d getMidPoint() const
 	{
 		return m_midPoint;
 	}
 
-	long double getLength()
+	const long double getLength() const
 	{
 		return m_length;
 	}
 
-	long double getSlope()
+	const long double getSlope() const
 	{
 		return m_slope;
 	}
 
-	long double getRise()
+	const long double getRise() const 
 	{
 		return m_rise;
 	}
 
-	long double getRun()
+	const long double getRun() const 
 	{
 		return m_run;
 	}
 
-	void translate( long double x, long double y )
+	const Point2d getintersectingPoint(const Point2d &other)
+	{
+		//TODO
+	}
+
+	void translate( const long double x, const long double y )
 	{
 		m_endPoints[0].translate(x, y);
 		m_endPoints[1].translate(x, y);
 		m_midPoint.translate(x, y);
 	}
 
-	void rotate(Point2d center, long double angle)
+	void rotate(const Point2d &center, const long double angle)
 	{
 		//TODO
 		m_setSlope();
@@ -175,6 +194,15 @@ public:
 		return (m_rise == 0.0f) && (m_run != NULL);
 	}
 
+	bool isPerpendicular(const Segment &other)
+	{
+		//TODO
+	}
+
+	bool isParallel(const Segment &other)
+	{
+		//TODO
+	}
 private:
 
 	void m_setLength()
@@ -213,44 +241,88 @@ class Triangle{
 	
 private:
 	/* CONVENTION
-	*	line[0] is the base,
-	*	angle[0], point[0] is oppose to line[0],
-	*	angle[1], point[1] is oppose to line[1],
-	*	angle[2], point[2] is oppose to line[2]
+	*	Segment[0] is the base,
+	*	angle[0], point[0] is oppose to Segment[0],
+	*	angle[1], point[1] is oppose to Segment[1],
+	*	angle[2], point[2] is oppose to Segment[2]
 	*/
-	Line m_lines[3];
-	long double m_angle[3];
+	Segment m_Sides[3];
+	long double m_angles[3];
 	long double m_perimeter, m_area;
 
 public:
 	// constructor parameters rework need
 	Triangle(const Point2d endPoints[3])
 	{
-		m_lines[0].setEndPoint(endPoints[1], 0); //line0, endPoint1
-		m_lines[0].setEndPoint(endPoints[2], 1); //line0, endPoint2
-		m_lines[1].setEndPoint(endPoints[1], 0); //line 1, endPoint1
-		m_lines[1].setEndPoint(endPoints[0], 1); //line1, endPoint0 ( height )
-		m_lines[2].setEndPoint(endPoints[2], 0); //line2 , endPoint2
-		m_lines[2].setEndPoint(endPoints[0], 1); //line2, endPoint0 ( height )
+		m_Sides[0].setEndPoint(endPoints[1], 0); //Segment0, endPoint1
+		m_Sides[0].setEndPoint(endPoints[2], 1); //Segment0, endPoint2
+		m_Sides[1].setEndPoint(endPoints[1], 0); //Segment 1, endPoint1
+		m_Sides[1].setEndPoint(endPoints[0], 1); //Segment1, endPoint0 ( height )
+		m_Sides[2].setEndPoint(endPoints[2], 0); //Segment2 , endPoint2
+		m_Sides[2].setEndPoint(endPoints[0], 1); //Segment2, endPoint0 ( height )
 	}
 
-	Triangle(Line base, Point2d heigth = 0.0f)
+	Triangle(const Segment &base, const Point2d &heigth)
 	{
-		m_lines[0] = base;
-		m_lines[1].setEndPoint(m_lines[0].getEndPoint(0), 0); 
-		m_lines[1].setEndPoint(heigth, 1);
-		m_lines[2].setEndPoint(m_lines[0].getEndPoint(1), 0);
-		m_lines[2].setEndPoint(heigth, 1);
+		m_Sides[0] = base;
+		m_Sides[1].setEndPoint(m_Sides[0].getEndPoint(0), 0); 
+		m_Sides[1].setEndPoint(heigth, 1);
+		m_Sides[2].setEndPoint(m_Sides[0].getEndPoint(1), 0);
+		m_Sides[2].setEndPoint(heigth, 1);
+	}
+
+	const long double getArea() const
+	{
+		//TOdO
+	}
+
+	const long double getPerimeter() const
+	{
+		//TOdO
 	}
 
 	void translate( long double x, long double y )
 	{
-		m_lines[0].translate( x, y );
-		m_lines[1].translate( x, y );
-		m_lines[2].translate( x, y );
+		m_Sides[0].translate( x, y );
+		m_Sides[1].translate( x, y );
+		m_Sides[2].translate( x, y );
 	}
 
 	void rotate(Point2d center, long double angle)
+	{
+		//TODO
+	}
+
+	//Classifying triangles by their angles
+
+	bool isAcute()
+	{
+		//TODO
+
+	}
+
+	bool isRight()
+	{
+		//TODO
+	}
+
+	bool isObtuse()
+	{
+		//TODO
+	}
+
+	//Classifying triangles by their side lengths
+	bool isEquilateral()
+	{
+		//TODO
+	}
+
+	bool isIsosceles()
+	{
+		//TODO
+	}
+
+	bool isScalene()
 	{
 		//TODO
 	}
