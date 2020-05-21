@@ -80,7 +80,7 @@ template<typename Number>
 const Number getDiv(const Number &a, const Number &b)
 {
 	if (b == 0)
-		std::cerr << "ERROR::ARITHMETIC::LINE78::Division by 0 is undefinde!" << std::endl;
+		std::cerr << "ERROR::ARITHMETIC::Division by 0 is undefinde!" << std::endl;
 	return a / b;
 }
 
@@ -105,7 +105,6 @@ const unsigned int getLeastCommonMultiple(const unsigned int a, const unsigned i
 	return aMultiple;
 }
 
-//TODO
 const unsigned int getGreatestCommonDivisor(const unsigned int a, const unsigned int b)
 {
 	unsigned int gcd = 1; //smallest common divisor
@@ -191,146 +190,6 @@ const Number getResult(const Number &a, const char operation)
 	return result;
 }
 
-/*class WholeNumber
-{
-private:
-	unsigned int m_wholeNumber;
-	
-public:
-	WholeNumber()
-		:m_wholeNumber(0) {}
-	WholeNumber(const int n)
-		:m_wholeNumber(n) {}
-	WholeNumber(const WholeNumber &other)
-		:m_wholeNumber(other.m_wholeNumber) {}
-
-	WholeNumber& operator=(const WholeNumber &rhs)
-	{
-		if (this != &rhs)
-		{
-			this->m_wholeNumber = rhs.m_wholeNumber;
-		}
-		return *this;
-	}
-
-	WholeNumber& operator+=(const WholeNumber &rhs)
-	{
-		this->m_wholeNumber = this->m_wholeNumber + rhs.m_wholeNumber;
-		return *this;
-	}
-
-	friend WholeNumber operator+(WholeNumber lhs, const WholeNumber &rhs)
-	{
-		lhs += rhs;
-		return lhs;
-	}
-
-	WholeNumber& operator-=(const WholeNumber &rhs)
-	{
-		if (this->m_wholeNumber < rhs.m_wholeNumber)
-			std::cerr << "Can not substract a bigger Whole number from a smaller Whole number!" << std::endl;
-		else
-			this->m_wholeNumber = this->m_wholeNumber - rhs.m_wholeNumber;
-		return *this;
-	}
-
-	friend WholeNumber operator-(WholeNumber lhs, const WholeNumber &rhs)
-	{
-		lhs -= rhs;
-		return lhs;
-	}
-
-	WholeNumber& operator-()
-	{
-		std::cerr << "Whole numbers have no opposites!" << std::endl;
-		return *this;
-	}
-
-	WholeNumber& operator++()
-	{
-		this->m_wholeNumber++;
-		return *this;
-	}
-
-	WholeNumber& operator++(int)
-	{
-		this->m_wholeNumber++;
-		return *this;
-	}
-
-	WholeNumber& operator--()
-	{
-		if (this->m_wholeNumber == 0)
-			std::cerr << "Whole numbers can not be smaller then 0!" << std::endl;
-		else
-			this->m_wholeNumber--;
-		return *this;
-	}
-
-	WholeNumber& operator--(int)
-	{
-		if (this->m_wholeNumber == 0)
-			std::cerr << "Whole numbers can not be smaller then 0!" << std::endl;
-		else
-			this->m_wholeNumber--;
-		return *this;
-	}
-
-	WholeNumber& operator*=(const WholeNumber &rhs)
-	{
-		this->m_wholeNumber = this->m_wholeNumber * rhs.m_wholeNumber;
-		return *this;
-	}
-
-	friend WholeNumber operator*(WholeNumber lhs, const WholeNumber &rhs)
-	{
-		lhs *= rhs;
-		return lhs;
-	}
-
-	WholeNumber& operator/=(const WholeNumber &rhs)
-	{
-		this->m_wholeNumber = this->m_wholeNumber / rhs.m_wholeNumber;
-		return *this;
-	}
-
-	friend WholeNumber operator/(WholeNumber lhs, const WholeNumber &rhs)
-	{
-		lhs /= rhs;
-		return lhs;
-	}
-
-	friend bool operator==(const WholeNumber &lhs, const WholeNumber &rhs)
-	{
-		return lhs.m_wholeNumber == rhs.m_wholeNumber;
-	}
-
-	friend bool operator!=(const WholeNumber &lhs, const WholeNumber &rhs) { return !operator==(lhs, rhs); }
-
-	friend bool operator< (const WholeNumber &lhs, const WholeNumber &rhs)
-	{
-		return lhs.m_wholeNumber < rhs.m_wholeNumber;
-	}
-
-	friend bool operator> (const WholeNumber &lhs, const WholeNumber &rhs) { return operator< (rhs, lhs); }
-	friend bool operator<=(const WholeNumber &lhs, const WholeNumber &rhs) { return !operator> (lhs, rhs); }
-	friend bool operator>=(const WholeNumber &lhs, const WholeNumber &rhs) { return !operator< (lhs, rhs); }
-
-
-	friend std::ostream& operator<<(std::ostream& os, const WholeNumber &obj)
-	{
-		os << obj.m_wholeNumber;
-		return os;
-	}
-
-	friend std::istream& operator>>(std::istream& is, WholeNumber &obj)
-	{
-		std::cout << "Enter Whole number(Only Positive Integer Accepted): ";
-		is >> obj.m_wholeNumber;
-		return is;
-	}
-};*/
-
 class Fraction
 {
 private:
@@ -349,7 +208,7 @@ public:
 		while( (n * m_denominator) - m_numerator != 0)
 		{
 			m_denominator *= 10; //next decimal place
-			m_numerator = n * m_denominator; // next decimal value
+			m_numerator = n * m_denominator; // next decimal place value
 		}
 	}
 
@@ -770,4 +629,16 @@ public:
 		:m_decimal(frac.getDecimal()) {}
 	Decimal(const MixedNumber &mn)
 		:m_decimal(mn.getDecimal()) {}
+		
+	const Fraction getFraction() const
+	{
+		//TODO
+		return Fraction();
+	}
+	
+	const MixedNumber getMixedNumber()
+	{
+		//TODO
+		return MixedNumber();
+	}
 };

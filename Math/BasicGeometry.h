@@ -74,6 +74,12 @@ public:
 		m_x += x;
 		m_y += y;
 	}
+	
+	void translate(const Point2d &trans)
+	{
+		this->m_x += trans.m_x;
+		this->m_y += trans.m_y;
+	}
 
 	void rotate(const Point2d& center, const long double angle)
 	{
@@ -323,6 +329,11 @@ public:
 	}
 
 	bool isScalene()
+	{
+		//TODO
+	}
+	
+	bool isSymmetrical()
 	{
 		//TODO
 	}

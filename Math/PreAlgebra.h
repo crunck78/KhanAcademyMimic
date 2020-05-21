@@ -7,6 +7,7 @@
 #include <math.h>
 #include "Constants.h"
 #include "Arithmetic.h"
+#include "BasicGeometry.h"
 
 class WholeNumber
 {
@@ -167,28 +168,10 @@ public:
 		}
 	}
 
-	/*virtual const unsigned long long int m_getPrimeFactorsComposition()
-	{
-		if (m_primeFactors.empty())
-		{
-			std::cout << "Prime Factors Vector is empty." << std::endl;
-			return MIN_WHOLE_NUM;
-		}
-		else
-		{
-			const unsigned long long int compposedNumber = MIN_FACTOR;
-			for (int i = 0; i < m_primeFactors.size(); i++)
-			{
-				compposedNumber *= m_primeFactors[i];
-			}
-			return compposedNumber;
-		}
-	}*/
-
 	//TODO
 	const std::vector<unsigned long long int> getLeastCommonPrimeFactors(const WholeNumber &other)
 	{
-
+		
 	}
 
 	//TODO rework
@@ -462,57 +445,26 @@ public:
 	}
 };
 
-/*
-class GCF : public WholeNumber
+class CoordinatePlane
 {
-protected:
-	WholeNumber *p_numbers;
+private:
+	unsigned int size_y;
+	unsigned int size_x;
+	Segment m_y;
+	Segment m_x;
+	const Point2d m_origin(0,0);
 public:
-
-	GCF()
-		:p_numbers(nullptr)
-	{
-
-	}
-
-	GCF(const unsigned int size, ...)
-	{
-		set(size, ...);
-	}
-
-	~GCF()
-	{
-		delete[] p_numbers;
-	}
-
-	void set(const unsigned int size, ...)//only unsigned long long int data type
-	{
-		p_numbers = new WholeNumber[size];
-		va_list(args);
-		va_start(args, size);
-
-		for (unsigned int i = 0; i < size; i++)
-		{
-			const unsigned long long int number = va_arg(args, const unsigned long long int);
-			p_numbers[i].set(number);
-			p_numbers[i].primeFactorise();
-		}
-		va_end(args);
-	}
+	CoordinatePlane(
 };
 
-/*
-class LCM : public GCF
+template <typename Data>
+class FrequencyTable
 {
-
+private:
+	std::vector<Data> m_values;
+	std::map<Data, int> m_frequencyMap;
 public:
-	LCM()
-	{
-		p_numbers = nullptr;
-	}
+	
+};
 
-	LCM(const unsigned int size, ...)
-	{
-		set(const unsigned int size, ...);
-	}
-};*/
+
