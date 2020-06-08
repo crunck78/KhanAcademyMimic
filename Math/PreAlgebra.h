@@ -424,7 +424,7 @@ public:
 	const RationalNumber getEquivalent(const RationalNumber &other)
 	{
 		//TODO
-		return other; //
+		return other;
 	}
 
 	bool isEquivalent(const RationalNumber &other)
@@ -434,6 +434,8 @@ public:
 	}
 };
 
+
+//TODO
 class IrrationalNumber
 {
 private:
@@ -445,6 +447,7 @@ public:
 	}
 };
 
+//TODO
 class CoordinatePlane
 {
 private:
@@ -454,9 +457,10 @@ private:
 	Segment m_x;
 	const Point2d m_origin(0,0);
 public:
-	CoordinatePlane(
+	
 };
 
+//TODO
 template <typename Data>
 class FrequencyTable
 {

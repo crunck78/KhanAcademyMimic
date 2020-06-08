@@ -3,7 +3,6 @@
 #include <iostream>
 #include "Input/Input.h"
 #include "Math/Arithmetic.h"
-#include "Math/BasicGeometry.h"
 
 #define APP_NAME "KHAN ACADEMY"
 #define EXIT 0
@@ -101,18 +100,6 @@ public:
 	}
 };
 
-template<typename T, typename N>
-class Converter : public Menu
-{
-private:
-	T m_from;
-	N m_to;
-	int m_convCode;
-public:
-	Converter(const char* name, const int convCode)
-		: Menu(name), m_convCode(convCode) {}
-};
-
 class RemainderDivision : public Menu
 {
 private:
@@ -168,11 +155,12 @@ Menu K_prealgebra("PRE ALGEBRA");
 BinaryOperation<int> K_addition("ADDITION", ADDITION);
 BinaryOperation<int> K_substraction("SUBSTRACTION", SUBSTRACTION);
 BinaryOperation<int> K_multiplication("MULTIPLICATION", MULTIPLICATION);
-BinaryOperation<int> K_division("DIVISION", DIVISION);
+BinaryOperation<float> K_division("DIVISION", DIVISION);
 RemainderDivision K_remainderDivision("DIVISION WITH REMAINDER");
 UnaryOperation<int> K_opposite("OPPOSITE", OPPOSITE);
 UnaryOperation<int> K_absolute("ABSOLUTE VALUE", ABSOLUTE);
 Menu K_fractions("FRACTIONS");
+Menu K_decimals("DECIMALS");
 
 //Options for Menu Fractions
 BinaryOperation<Fraction> K_fraction_addition("ADDITION", ADDITION);
@@ -182,7 +170,7 @@ BinaryOperation<Fraction> K_fraction_division("DIVISION", DIVISION);
 UnaryOperation<Fraction> K_fraction_opposite("OPPOSITE", OPPOSITE);
 UnaryOperation<Fraction> K_fraction_absolute("ABSOLUTE VALUE", ABSOLUTE);
 CommonDenominators K_fraction_common_denominators("COMMON DENOMINATORS");
-Menu K_mixedNumbers("Mixed Numbers");
+Menu K_mixedNumbers("MIXED NUMBERS");
 
 //Options for Menu MixedNumbers
 BinaryOperation<MixedNumber> K_mixedNumbers_addition("ADDITION", ADDITION);
@@ -200,7 +188,7 @@ void initMenuTree()
 
 	const std::vector<Menu*> K_mathOptions = { &K_main, &K_arithmetic, &K_basicgeometrie, &K_prealgebra };
 
-	const std::vector<Menu*> K_arithmeticOptions = { &K_math, &K_addition, &K_substraction, &K_multiplication, &K_division, &K_remainderDivision, &K_opposite, &K_absolute, &K_fractions };
+	const std::vector<Menu*> K_arithmeticOptions = { &K_math, &K_addition, &K_substraction, &K_multiplication, &K_division, &K_remainderDivision, &K_opposite, &K_absolute, &K_fractions, &K_decimals };
 	const std::vector<Menu*> K_basicgeometrieOptions = { &K_math };
 	const std::vector<Menu*> K_prealgebraOptions = { &K_math };
 
@@ -212,6 +200,7 @@ void initMenuTree()
 	const std::vector<Menu*> K_oppositeOptions = { &K_arithmetic };
 	const std::vector<Menu*> K_absoluteOptions = { &K_arithmetic };
 	const std::vector<Menu*> K_fractionsOptions = { &K_arithmetic,  &K_fraction_addition, &K_fraction_substraction, &K_fraction_multiplication, &K_fraction_division, &K_fraction_opposite, &K_fraction_absolute, &K_fraction_common_denominators, &K_mixedNumbers};
+	const std::vector<Menu*> K_decimalsOptions = { &K_arithmetic };
 
 	const std::vector<Menu*> K_fraction_additionOptions = { &K_fractions };
 	const std::vector<Menu*> K_fraction_substractionOptions = { &K_fractions };
@@ -245,6 +234,7 @@ void initMenuTree()
 	K_opposite.setOptions(K_oppositeOptions);
 	K_absolute.setOptions(K_absoluteOptions);
 	K_fractions.setOptions(K_fractionsOptions);
+	K_decimals.setOptions(K_decimalsOptions);
 	
 	K_fraction_addition.setOptions(K_fraction_additionOptions);
 	K_fraction_substraction.setOptions(K_fraction_substractionOptions);

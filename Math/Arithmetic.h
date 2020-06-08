@@ -1,7 +1,7 @@
 #pragma once 
 #include <iostream>
 
-//ASCII CODE FOR MATHEMATICAL OPERATIONS
+//ASCII CODE FOR MATHEMATICAL OPERATIONS SIGNS
 enum BinaryOperations
 {
 	EQUAL = 61, ADDITION = 43, SUBSTRACTION = 45, MULTIPLICATION = 42, DIVISION = 47, LCM = 109
@@ -15,7 +15,7 @@ enum UnaryOperations
 
 enum Converstions
 {
-	MIXEDNUM_TO_IMPRFRACT = 1, IMPRFRACT_TO_MIXEDNUM = -1, 
+	MIXEDNUM_TO_IMPRFRACT = 1, IMPRFRACT_TO_MIXEDNUM = -1
 };
 
 //TODO
@@ -190,6 +190,7 @@ const Number getResult(const Number &a, const char operation)
 	return result;
 }
 
+
 class Fraction
 {
 private:
@@ -204,7 +205,6 @@ public:
 	Fraction(const float n)
 	:m_numerator(n), m_denominator(1)
 	{
-		//TODO
 		while( (n * m_denominator) - m_numerator != 0)
 		{
 			m_denominator *= 10; //next decimal place
@@ -568,7 +568,6 @@ public:
 
 	friend bool operator!=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator==(lhs, rhs); }
 
-	//TODO
 	friend bool operator< (const MixedNumber &lhs, const MixedNumber &rhs)
 	{
 		return lhs.getImproperFraction() < rhs.getImproperFraction();
@@ -584,12 +583,6 @@ public:
 		const int numerator = m_wholePart * m_proper.getDenominator() + m_proper.getNumerator();
 		improper.set(numerator, m_proper.getDenominator());
 		return improper;
-	}
-
-	friend const MixedNumber getMixedNumber(const Fraction &improper)
-	{
-		const MixedNumber converted(improper);
-		return converted;
 	}
 	
 	const float getDecimal() const
@@ -621,24 +614,148 @@ private:
 public:
 	Decimal()
 		:m_decimal(0.0f) {}
+
 	Decimal(const float dec)
 		:m_decimal(dec) {}
+
 	Decimal(const int n)
 		:m_decimal(n) {}
+
 	Decimal(const Fraction &frac)
 		:m_decimal(frac.getDecimal()) {}
+
 	Decimal(const MixedNumber &mn)
 		:m_decimal(mn.getDecimal()) {}
+
+	Decimal(const Decimal &other)
+	{
+		this->m_decimal = other.m_decimal;
+	}
+
+	Decimal& operator=(const Decimal &other)
+	{
+		if (this != &other)
+			this->m_decimal = other.m_decimal;
+		return *this;
+	}
+
+	Decimal& operator+=(const Decimal &lhs)
+	{
+		this->m_decimal += lhs.m_decimal;
+		return *this;
+	}
+
+	friend Decimal operator+(Decimal lhs, const Decimal &rhs)
+	{
+		lhs += rhs;
+		return lhs;
+	}
+
+	Decimal& operator-=(const Decimal &lhs)
+	{
+		this->m_decimal -= lhs.m_decimal;
+		return *this;
+	}
+
+	friend Decimal operator-(Decimal lhs, const Decimal &rhs)
+	{
+		lhs -= rhs;
+		return lhs;
+	}
+
+	Decimal operator-()
+	{
+		return Decimal(-this->m_decimal);
+	}
+
+	Decimal& operator++()
+	{
+		this->m_decimal ++;
+		return *this;
+	}
+
+	Decimal& operator++(int)
+	{
+		this->m_decimal++;
+		return *this;
+	}
+
+	Decimal& operator--()
+	{
+		this->m_decimal--;
+		return *this;
+	}
+
+	Decimal& operator--(int)
+	{
+		this->m_decimal--;
+		return *this;
+	}
+
+	Decimal& operator*=(const Decimal &rhs)
+	{
+		this->m_decimal *= rhs.m_decimal;
+		return *this;
+	}
+
+	friend Decimal operator*(Decimal lhs, const Decimal &rhs)
+	{
+		lhs *= rhs;
+		return lhs;
+	}
+
+	Decimal& operator/=(const Decimal &rhs)
+	{
+		this->m_decimal /= rhs.m_decimal;
+		return *this;
+	}
+
+	friend Decimal operator/(Decimal lhs, const Decimal &rhs)
+	{
+		lhs /= rhs;
+		return lhs;
+	}
+
+	friend bool operator==(const Decimal &lhs, const Decimal &rhs)
+	{
+		return lhs.m_decimal == rhs.m_decimal;
+	}
+
+	friend bool operator!=(const Decimal &lhs, const Decimal &rhs) { return !operator==(lhs, rhs); }
+
+	friend bool operator< (const Decimal &lhs, const Decimal &rhs)
+	{
+		return lhs.m_decimal < rhs.m_decimal;
+	}
+
+	friend bool operator> (const Decimal &lhs, const Decimal &rhs) { return operator< (rhs, lhs); }
+	friend bool operator<=(const Decimal &lhs, const Decimal &rhs) { return !operator> (lhs, rhs); }
+	friend bool operator>=(const Decimal &lhs, const Decimal &rhs) { return !operator< (lhs, rhs); }
+
+
+	friend std::ostream& operator<<(std::ostream& os, const Decimal &obj)
+	{
+		os << obj.m_decimal;
+		return os;
+	}
+
+	//USE INPUT HELP CLASS TO SET DECIMAL CORRECT
+	friend std::istream& operator>>(std::istream& is, Decimal &obj)
+	{
+		std::cout << "Enter decimal: ";
+		is >> obj.m_decimal;
+		return is;
+	}
 		
 	const Fraction getFraction() const
 	{
 		//TODO
-		return Fraction();
+		return Fraction(m_decimal);
 	}
 	
 	const MixedNumber getMixedNumber()
 	{
 		//TODO
-		return MixedNumber();
+		return MixedNumber(m_decimal);
 	}
 };
