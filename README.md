@@ -1,4 +1,4 @@
-# KhanAcademy
+# KhanAcademyMimic
 
 08.06.2020 21:57 Germany
 
