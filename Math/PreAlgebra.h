@@ -12,16 +12,14 @@
 class WholeNumber
 {
 protected:
-
 	std::map<unsigned long long int, unsigned short int> m_decomposeValues; // holds a map of m_Wholenumber decomposition, key-values are the place values, and element-values are the digits coresponding to m_WhloeNumber's place-value
-	std::vector<unsigned long long int> m_expandValues; //holds the expand-values of m_WholeNumber after decomposition ( expand-value equals key-value * coresponding element-value of m_decomposeValues )
+	std::vector<unsigned long long int> m_expandValues;						//holds the expand-values of m_WholeNumber after decomposition ( expand-value equals key-value * coresponding element-value of m_decomposeValues )
 	std::map<unsigned long long int, unsigned long long int> m_factorPairs; //holds a map of factors after defactorisation, key-values and element-value are the pair factors of m_WholeNumber that compose it
-	std::vector<unsigned long long int> m_primeFactors; // holds a vector of prime-factors
-	unsigned long long int m_WholeNumber;// 9999999999999; // maximal value
+	std::vector<unsigned long long int> m_primeFactors;						// holds a vector of prime-factors
+	unsigned long long int m_WholeNumber;									// 9999999999999; // maximal value
 public:
-
 	WholeNumber()
-		:m_WholeNumber(MIN_WHOLE_NUM) {}
+		: m_WholeNumber(MIN_WHOLE_NUM) {}
 
 	WholeNumber(const unsigned long long int number)
 	{
@@ -115,22 +113,22 @@ public:
 			return nearstRounding; //roundUp;
 		}
 
-		unsigned long long int leftTrunc = m_WholeNumber / nearstRounding; //holds the leftside trunc to be rounded
+		unsigned long long int leftTrunc = m_WholeNumber / nearstRounding;	//holds the leftside trunc to be rounded
 		unsigned long long int rigthTrunc = m_WholeNumber % nearstRounding; //holds the rightside trunc to be evaluated
 
 		if (rigthTrunc < roundingPoint)
-			return (leftTrunc * nearstRounding); //roundDown
+			return (leftTrunc * nearstRounding);	   //roundDown
 		return (leftTrunc + roundUp) * nearstRounding; //roundUp
 	}
 
 	virtual void decompose()
 	{
-		if (! (m_decomposeValues.empty() && m_expandValues.empty()))
+		if (!(m_decomposeValues.empty() && m_expandValues.empty()))
 			std::cout << "Already decomposed!" << std::endl;
 		else // do decomposition
 		{
 			unsigned long long int temp = m_WholeNumber; //holds the left-side trunc to be evaluated
-			unsigned long long int placeValue = 1; //holds the place-value to get from temp
+			unsigned long long int placeValue = 1;		 //holds the place-value to get from temp
 			m_setDecomposeValue(temp, placeValue);
 		}
 	}
@@ -139,13 +137,13 @@ public:
 	{
 		if (m_WholeNumber == MIN_WHOLE_NUM) // can't factorise 0
 			std::cout << "Can't factorise 0!" << std::endl;
-		else if (! m_factorPairs.empty())
+		else if (!m_factorPairs.empty())
 			std::cout << "Already factorized!" << std::endl;
 		else if (m_WholeNumber == MIN_FACTOR) //number equals 1
 			m_factorPairs[MIN_FACTOR] = MIN_FACTOR;
-		else// do factorization for number greater then 1
+		else // do factorization for number greater then 1
 		{
-			unsigned long long int number = m_WholeNumber; //number is not changed by m_setFactorPair, but changed by prime factorization
+			unsigned long long int number = m_WholeNumber;	//number is not changed by m_setFactorPair, but changed by prime factorization
 			unsigned long long int factorTest = MIN_FACTOR; //number to be tested if it is a factor
 			m_setFactorPair(number, factorTest);
 		}
@@ -157,21 +155,20 @@ public:
 			std::cout << "Can't factorise 0!" << std::endl;
 		else if (!m_primeFactors.empty())
 			std::cout << "Already prime-factorized!" << std::endl;
-		else if (m_WholeNumber == MIN_FACTOR) //number equals 1
+		else if (m_WholeNumber == MIN_FACTOR)								  //number equals 1
 			std::cout << "Number 1 has no prime decomposition." << std::endl; // vector remains empty
-		else// do factorization for number greater then 1
+		else																  // do factorization for number greater then 1
 		{
 			unsigned long long int number = m_WholeNumber; //number is not changed by m_setFactorPair, but changed by prime factorization
-			unsigned long long int factorTest = 1; //number to be tested if it is a factor
+			unsigned long long int factorTest = 1;		   //number to be tested if it is a factor
 			unsigned long long int factorCounter = 1;
-			m_setPrimeFactor(number, ++factorTest, factorCounter);//start prime factorization with 2
+			m_setPrimeFactor(number, ++factorTest, factorCounter); //start prime factorization with 2
 		}
 	}
 
 	//TODO
 	const std::vector<unsigned long long int> getLeastCommonPrimeFactors(const WholeNumber &other)
 	{
-		
 	}
 
 	//TODO rework
@@ -210,7 +207,7 @@ public:
 	//TODO rework
 	const unsigned long long int getGreatestCommonFactor(const WholeNumber &other) const
 	{
-		if (m_WholeNumber == MIN_WHOLE_NUM )
+		if (m_WholeNumber == MIN_WHOLE_NUM)
 			return other.getWholeNumber();
 		if (other.getWholeNumber() == MIN_WHOLE_NUM)
 			return m_WholeNumber;
@@ -218,7 +215,7 @@ public:
 		unsigned long long int commonFactor = MIN_FACTOR;
 		if (m_WholeNumber == MIN_FACTOR || other.getWholeNumber() == MIN_FACTOR)
 			return commonFactor;
-		
+
 		const std::vector<unsigned long long int> otherPrimeFactors = other.getPrimeFactors();
 		for (unsigned int i = 0; i < m_primeFactors.size(); i++)
 		{
@@ -255,16 +252,16 @@ public:
 protected:
 	void m_clear() // clear maps and vector members
 	{
-		if (! m_decomposeValues.empty())
+		if (!m_decomposeValues.empty())
 			m_decomposeValues.clear();
 
-		if (! m_expandValues.empty())
+		if (!m_expandValues.empty())
 			m_expandValues.clear();
 
-		if (! m_factorPairs.empty())
+		if (!m_factorPairs.empty())
 			m_factorPairs.clear();
 
-		if (! m_primeFactors.empty())
+		if (!m_primeFactors.empty())
 			m_primeFactors.clear();
 	}
 
@@ -291,9 +288,9 @@ private:
 
 	void m_setPrimeFactor(unsigned long long int &number, unsigned long long int &factorTest, unsigned long long int &factorCounter)
 	{
-		while(factorCounter != m_WholeNumber) //check if found all prime factors
+		while (factorCounter != m_WholeNumber) //check if found all prime factors
 		{
-			while(number % factorTest == 0) //prime factorization starts with 2
+			while (number % factorTest == 0) //prime factorization starts with 2
 			{
 				m_primeFactors.push_back(factorTest);
 				number /= factorTest;
@@ -305,26 +302,25 @@ private:
 
 	void m_setFactorPair(const unsigned long long int &number, unsigned long long int &factorTest)
 	{
-		while (m_factorPairs.count(number / factorTest) == 0)//check if already found factor
+		while (m_factorPairs.count(number / factorTest) == 0) //check if already found factor
 		{
 			if (number % factorTest == 0) //found factor
 			{
 				m_factorPairs[factorTest] = (number / factorTest);
 			}
-			factorTest++;// next factor
+			factorTest++; // next factor
 		}
 	}
 };
 
-class Integer: public WholeNumber
+class Integer : public WholeNumber
 {
 protected:
 	long long int m_Integer;
 
 public:
-
 	Integer()
-		:m_Integer(MIN_WHOLE_NUM) {}
+		: m_Integer(MIN_WHOLE_NUM) {}
 
 	Integer(long long int number)
 	{
@@ -335,7 +331,7 @@ public:
 	{
 		if (number > MAX_INT)
 			m_Integer = MAX_INT;
-		else if(number < MIN_INT)
+		else if (number < MIN_INT)
 			m_Integer = MIN_INT;
 		else
 			m_Integer = number;
@@ -361,12 +357,13 @@ public:
 	}
 };
 
-class RationalNumber: public Integer
+class RationalNumber : public Integer
 {
 private:
 	Integer m_Numerator;
 	Integer m_Denominator; // can not be equal to zero
 	long double m_Rational;
+
 public:
 	RationalNumber(long long int num, long long int den)
 	{
@@ -430,16 +427,16 @@ public:
 	bool isEquivalent(const RationalNumber &other)
 	{
 		//TODO
-		return false;//(this->m_Numerator * other.m_Denominator) == (this->m_Denominator * other.m_Numerator);
+		return false; //(this->m_Numerator * other.m_Denominator) == (this->m_Denominator * other.m_Numerator);
 	}
 };
-
 
 //TODO
 class IrrationalNumber
 {
 private:
 	long double m_Irrational;
+
 public:
 	IrrationalNumber(long double irr)
 	{
@@ -455,9 +452,9 @@ private:
 	unsigned int size_x;
 	Segment m_y;
 	Segment m_x;
-	const Point2d m_origin(0,0);
+	const Point2d m_origin(0, 0);
+
 public:
-	
 };
 
 //TODO
@@ -467,8 +464,6 @@ class FrequencyTable
 private:
 	std::vector<Data> m_values;
 	std::map<Data, int> m_frequencyMap;
+
 public:
-	
 };
-
-

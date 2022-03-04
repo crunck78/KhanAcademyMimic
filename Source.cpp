@@ -4,7 +4,6 @@
 
 int main()
 {
-	
 	initMenuTree();
 	Menu *actual = &K_main;
 	while (actual != &K_exit)

@@ -6,11 +6,11 @@
 
 class Point2d
 {
-	
+
 private:
 	long double m_x;
 	long double m_y;
-	
+
 public:
 	Point2d()
 		: m_x(0), m_y(0) {}
@@ -23,9 +23,9 @@ public:
 		this->init(other.m_x, other.m_y);
 	}
 
-	Point2d& operator=(const Point2d &other)
+	Point2d &operator=(const Point2d &other)
 	{
-		if(this != &other)
+		if (this != &other)
 			this->init(other.m_x, other.m_y);
 		return *this;
 	}
@@ -46,49 +46,49 @@ public:
 		m_y = y;
 	}
 
-	const long double getX() const 
+	const long double getX() const
 	{
 		return m_x;
 	}
-	
-	const long double getY() const 
+
+	const long double getY() const
 	{
 		return m_y;
 	}
 
 	const long double getDistanceFrom(const Point2d &other)
 	{
-		return hypot( (other.getX() - m_x), (other.getY() - m_y));
+		return hypot((other.getX() - m_x), (other.getY() - m_y));
 	}
 
-	const Point2d getMidPointFrom(const Point2d& other) const
+	const Point2d getMidPointFrom(const Point2d &other) const
 	{
 		Point2d midPoint;
 		midPoint.setX(midValue(this->m_x, other.m_x));
 		midPoint.setY(midValue(this->m_y, other.m_y));
 		return midPoint;
 	}
-	
-	void translate( const long double x, const long double y )
+
+	void translate(const long double x, const long double y)
 	{
 		m_x += x;
 		m_y += y;
 	}
-	
+
 	void translate(const Point2d &trans)
 	{
 		this->m_x += trans.m_x;
 		this->m_y += trans.m_y;
 	}
 
-	void rotate(const Point2d& center, const long double angle)
+	void rotate(const Point2d &center, const long double angle)
 	{
 		//TODO
 	}
 
 	void reflectOver(const long double reflectionLineSlope)
 	{
-		//TODO 
+		//TODO
 		/*
 		-find point of perpendicular intersection
 			-
@@ -96,13 +96,14 @@ public:
 	}
 };
 
-class Segment{
+class Segment
+{
 
 private:
 	Point2d m_endPoints[2], m_midPoint;
 	long double m_rise, m_run, m_slope, m_length;
 	bool m_isVertical, m_isHorizontal;
-	
+
 public:
 	//constructor rework need
 	Segment()
@@ -123,7 +124,7 @@ public:
 		m_setMidPoint();
 	}
 
-	Segment(const Point2d& endPoint1, const Point2d& endPoint2)
+	Segment(const Point2d &endPoint1, const Point2d &endPoint2)
 	{
 		m_endPoints[0] = endPoint1;
 		m_endPoints[1] = endPoint2;
@@ -162,12 +163,12 @@ public:
 		return m_slope;
 	}
 
-	const long double getRise() const 
+	const long double getRise() const
 	{
 		return m_rise;
 	}
 
-	const long double getRun() const 
+	const long double getRun() const
 	{
 		return m_run;
 	}
@@ -177,7 +178,7 @@ public:
 		//TODO
 	}
 
-	void translate( const long double x, const long double y )
+	void translate(const long double x, const long double y)
 	{
 		m_endPoints[0].translate(x, y);
 		m_endPoints[1].translate(x, y);
@@ -209,8 +210,8 @@ public:
 	{
 		//TODO
 	}
-private:
 
+private:
 	void m_setLength()
 	{
 		m_length = m_endPoints[0].getDistanceFrom(m_endPoints[1]);
@@ -227,7 +228,7 @@ private:
 		m_setRise();
 		m_setRun();
 		if (isVertical())
-			m_slope = NULL; 
+			m_slope = NULL;
 		else
 			m_slope = m_rise / m_run;
 	}
@@ -243,8 +244,9 @@ private:
 	}
 };
 
-class Triangle{
-	
+class Triangle
+{
+
 private:
 	/* CONVENTION
 	*	Segment[0] is the base,
@@ -271,7 +273,7 @@ public:
 	Triangle(const Segment &base, const Point2d &heigth)
 	{
 		m_Sides[0] = base;
-		m_Sides[1].setEndPoint(m_Sides[0].getEndPoint(0), 0); 
+		m_Sides[1].setEndPoint(m_Sides[0].getEndPoint(0), 0);
 		m_Sides[1].setEndPoint(heigth, 1);
 		m_Sides[2].setEndPoint(m_Sides[0].getEndPoint(1), 0);
 		m_Sides[2].setEndPoint(heigth, 1);
@@ -287,11 +289,11 @@ public:
 		//TOdO
 	}
 
-	void translate( long double x, long double y )
+	void translate(long double x, long double y)
 	{
-		m_Sides[0].translate( x, y );
-		m_Sides[1].translate( x, y );
-		m_Sides[2].translate( x, y );
+		m_Sides[0].translate(x, y);
+		m_Sides[1].translate(x, y);
+		m_Sides[2].translate(x, y);
 	}
 
 	void rotate(Point2d center, long double angle)
@@ -304,7 +306,6 @@ public:
 	bool isAcute()
 	{
 		//TODO
-
 	}
 
 	bool isRight()
@@ -332,7 +333,7 @@ public:
 	{
 		//TODO
 	}
-	
+
 	bool isSymmetrical()
 	{
 		//TODO
@@ -366,7 +367,7 @@ long double areaCircle(long double radius)
 
 long double volumeOfRectPrism(long double length, long double width, long double heigth)
 {
-	return(length * width * heigth);
+	return (length * width * heigth);
 }
 
 long double areaOfRectPrism(long double length1, long double length2, long double length3)

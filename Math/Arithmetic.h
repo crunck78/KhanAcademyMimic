@@ -1,82 +1,88 @@
-#pragma once 
+#pragma once
 #include <iostream>
 
 //ASCII CODE FOR MATHEMATICAL OPERATIONS SIGNS
 enum BinaryOperations
 {
-	EQUAL = 61, ADDITION = 43, SUBSTRACTION = 45, MULTIPLICATION = 42, DIVISION = 47, LCM = 109
+	EQUAL = 61,
+	ADDITION = 43,
+	SUBSTRACTION = 45,
+	MULTIPLICATION = 42,
+	DIVISION = 47,
+	LCM = 109
 };
 
 //TODO: Implement Unary Operations
 enum UnaryOperations
 {
-	ABSOLUTE = 97, OPPOSITE = 111
+	ABSOLUTE = 97,
+	OPPOSITE = 111
 };
 
 enum Converstions
 {
-	MIXEDNUM_TO_IMPRFRACT = 1, IMPRFRACT_TO_MIXEDNUM = -1
+	MIXEDNUM_TO_IMPRFRACT = 1,
+	IMPRFRACT_TO_MIXEDNUM = -1
 };
 
 //TODO
-static const std::vector<char> validOperations = { EQUAL, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION };
+static const std::vector<char> validOperations = {EQUAL, ADDITION, SUBSTRACTION, MULTIPLICATION, DIVISION};
 
-template<typename Number>
+template <typename Number>
 bool isPossitive(const Number &a)
 {
 	return (a > 0);
 }
 
-template<typename Number>
+template <typename Number>
 bool isNegative(const Number &a)
 {
 	return (a < 0);
 }
 
-template<typename Number>
+template <typename Number>
 bool isOpposite(const Number &a, const Number &b)
 {
 	return a == -b;
 }
 
-template<typename Number>
+template <typename Number>
 bool isEven(const Number &a)
 {
 	return (a % 2) == 0;
 }
 
-template<typename Number>
+template <typename Number>
 bool isDivisible(const Number &a, const Number &b)
 {
 	return (a % b) == 0;
 }
 
-template<typename Number>
+template <typename Number>
 const Number midValue(const Number &a, const Number &b)
 {
 	return (a + b) / 2;
 }
 
-
-template<typename Number>
+template <typename Number>
 const Number getSum(const Number &a, const Number &b)
 {
 	return a + b;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getSub(const Number &a, const Number &b)
 {
 	return a - b;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getProd(const Number &a, const Number &b)
 {
 	return a * b;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getDiv(const Number &a, const Number &b)
 {
 	if (b == 0)
@@ -84,12 +90,11 @@ const Number getDiv(const Number &a, const Number &b)
 	return a / b;
 }
 
-template<typename Number>
+template <typename Number>
 const unsigned int getRemainder(const Number &a, const Number &b)
 {
 	return a % b;
 }
-
 
 const unsigned int getLeastCommonMultiple(const unsigned int a, const unsigned int b)
 {
@@ -110,8 +115,8 @@ const unsigned int getGreatestCommonDivisor(const unsigned int a, const unsigned
 	unsigned int gcd = 1; //smallest common divisor
 	unsigned int biggerDivisor;
 	unsigned int smallerDivisor;
-	
-	if(a > b)
+
+	if (a > b)
 	{
 		biggerDivisor = a;
 		smallerDivisor = b;
@@ -121,17 +126,17 @@ const unsigned int getGreatestCommonDivisor(const unsigned int a, const unsigned
 		biggerDivisor = b;
 		smallerDivisor = a;
 	}
-	
-	if( isDivisible(biggerDivisor, smallerDivisor))
+
+	if (isDivisible(biggerDivisor, smallerDivisor))
 	{
 		gcd = smallerDivisor;
 	}
 	else
 	{
-		unsigned int divisorTest = 2;// smallest prime factor
-		while(divisorTest < smallerDivisor)
+		unsigned int divisorTest = 2; // smallest prime factor
+		while (divisorTest < smallerDivisor)
 		{
-			if(isDivisible(biggerDivisor,divisorTest) && isDivisible(smallerDivisor,divisorTest))
+			if (isDivisible(biggerDivisor, divisorTest) && isDivisible(smallerDivisor, divisorTest))
 			{
 				gcd *= divisorTest;
 				biggerDivisor /= divisorTest;
@@ -144,30 +149,39 @@ const unsigned int getGreatestCommonDivisor(const unsigned int a, const unsigned
 	return gcd;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getResult(const Number &a, const Number &b, const char operation)
 {
 	Number result = 0;
 	switch ((int)operation)
 	{
-	case ADDITION: result = getSum(a, b); break;
-	case SUBSTRACTION: result = getSub(a, b); break;
-	case MULTIPLICATION: result = getProd(a, b); break;
-	case DIVISION: result = getDiv(a, b); break;
-	default: std::cerr << "UNKNOWN OPERATION OF SIGN: " << operation << std::endl;
+	case ADDITION:
+		result = getSum(a, b);
+		break;
+	case SUBSTRACTION:
+		result = getSub(a, b);
+		break;
+	case MULTIPLICATION:
+		result = getProd(a, b);
+		break;
+	case DIVISION:
+		result = getDiv(a, b);
+		break;
+	default:
+		std::cerr << "UNKNOWN OPERATION OF SIGN: " << operation << std::endl;
 		std::cerr << "RETURN 0" << std::endl;
 		break;
 	}
 	return result;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getOpposite(const Number &a)
 {
 	return 0 - a;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getAbsoluteValue(const Number &a)
 {
 	if (isNegative(a))
@@ -175,39 +189,43 @@ const Number getAbsoluteValue(const Number &a)
 	return a;
 }
 
-template<typename Number>
+template <typename Number>
 const Number getResult(const Number &a, const char operation)
 {
 	Number result = 0;
 	switch ((int)operation)
 	{
-	case OPPOSITE: result = getOpposite(a); break;
-	case ABSOLUTE: result = getAbsoluteValue(a); break;
-	default: std::cerr << "UNKNOWN OPERATION OF SIGN: " << operation << std::endl;
+	case OPPOSITE:
+		result = getOpposite(a);
+		break;
+	case ABSOLUTE:
+		result = getAbsoluteValue(a);
+		break;
+	default:
+		std::cerr << "UNKNOWN OPERATION OF SIGN: " << operation << std::endl;
 		std::cerr << "RETURN 0" << std::endl;
 		break;
 	}
 	return result;
 }
 
-
 class Fraction
 {
 private:
 	int m_numerator;
-	int m_denominator;//if 0, is undefinde, if < 0 assigned the numerator and make denominator possitive
+	int m_denominator; //if 0, is undefinde, if < 0 assigned the numerator and make denominator possitive
 
 public:
 	Fraction()
-		:m_numerator(0), m_denominator(1) {}
+		: m_numerator(0), m_denominator(1) {}
 	Fraction(const int n)
-		:m_numerator(n), m_denominator(1) {}
+		: m_numerator(n), m_denominator(1) {}
 	Fraction(const float n)
-	:m_numerator(n), m_denominator(1)
+		: m_numerator(n), m_denominator(1)
 	{
-		while( (n * m_denominator) - m_numerator != 0)
+		while ((n * m_denominator) - m_numerator != 0)
 		{
-			m_denominator *= 10; //next decimal place
+			m_denominator *= 10;			 //next decimal place
 			m_numerator = n * m_denominator; // next decimal place value
 		}
 	}
@@ -222,7 +240,7 @@ public:
 		set(other.m_numerator, other.m_denominator);
 	}
 
-	Fraction& operator=(const Fraction &rhs)
+	Fraction &operator=(const Fraction &rhs)
 	{
 		if (this != &rhs)
 		{
@@ -231,7 +249,7 @@ public:
 		return *this;
 	}
 
-	Fraction& operator+=(const Fraction &rhs)
+	Fraction &operator+=(const Fraction &rhs)
 	{
 		if (this->m_denominator != rhs.m_denominator)
 		{
@@ -250,7 +268,7 @@ public:
 		return lhs;
 	}
 
-	Fraction& operator-=(const Fraction &rhs)
+	Fraction &operator-=(const Fraction &rhs)
 	{
 		if (this->m_denominator != rhs.m_denominator)
 		{
@@ -274,31 +292,31 @@ public:
 		return Fraction(-this->m_numerator, this->m_denominator);
 	}
 
-	Fraction& operator++()
+	Fraction &operator++()
 	{
 		this->m_numerator += this->m_denominator;
 		return *this;
 	}
 
-	Fraction& operator++(int)
+	Fraction &operator++(int)
 	{
 		this->m_numerator += this->m_denominator;
 		return *this;
 	}
 
-	Fraction& operator--()
+	Fraction &operator--()
 	{
 		this->m_numerator -= this->m_denominator;
 		return *this;
 	}
 
-	Fraction& operator--(int)
+	Fraction &operator--(int)
 	{
 		this->m_numerator -= this->m_denominator;
 		return *this;
 	}
 
-	Fraction& operator*=(const Fraction &rhs)
+	Fraction &operator*=(const Fraction &rhs)
 	{
 		this->m_numerator = this->m_numerator * rhs.m_numerator;
 		this->m_denominator = this->m_denominator * rhs.m_denominator;
@@ -311,7 +329,7 @@ public:
 		return lhs;
 	}
 
-	Fraction& operator/=(const Fraction &rhs)
+	Fraction &operator/=(const Fraction &rhs)
 	{
 		this->m_numerator = this->m_numerator * rhs.m_denominator;
 		this->m_denominator = this->m_denominator * rhs.m_numerator;
@@ -331,7 +349,7 @@ public:
 
 	friend bool operator!=(const Fraction &lhs, const Fraction &rhs) { return !operator==(lhs, rhs); }
 
-	friend bool operator< (const Fraction &lhs, const Fraction &rhs)
+	friend bool operator<(const Fraction &lhs, const Fraction &rhs)
 	{
 		if (lhs.m_denominator != rhs.m_denominator)
 			return (lhs.m_numerator * rhs.m_denominator) < (rhs.m_numerator * lhs.m_denominator);
@@ -339,19 +357,18 @@ public:
 			return lhs.m_numerator < rhs.m_numerator;
 	}
 
-	friend bool operator> (const Fraction &lhs, const Fraction &rhs) { return operator< (rhs, lhs); }
-	friend bool operator<=(const Fraction &lhs, const Fraction &rhs) { return !operator> (lhs, rhs); }
-	friend bool operator>=(const Fraction &lhs, const Fraction &rhs) { return !operator< (lhs, rhs); }
+	friend bool operator>(const Fraction &lhs, const Fraction &rhs) { return operator<(rhs, lhs); }
+	friend bool operator<=(const Fraction &lhs, const Fraction &rhs) { return !operator>(lhs, rhs); }
+	friend bool operator>=(const Fraction &lhs, const Fraction &rhs) { return !operator<(lhs, rhs); }
 
-
-	friend std::ostream& operator<<(std::ostream& os, const Fraction &obj)
+	friend std::ostream &operator<<(std::ostream &os, const Fraction &obj)
 	{
 		os << obj.m_numerator << '/' << obj.m_denominator;
 		return os;
 	}
 
 	//USE INPUT HELP CLASS TO SET FRACTION CORRECT
-	friend std::istream& operator>>(std::istream& is, Fraction &obj)
+	friend std::istream &operator>>(std::istream &is, Fraction &obj)
 	{
 		std::cout << "Enter numerator: ";
 		is >> obj.m_numerator;
@@ -365,7 +382,7 @@ public:
 		}
 		return is;
 	}
-	
+
 	void set(const int n, const int d)
 	{
 		if (d < 0)
@@ -413,17 +430,17 @@ public:
 	{
 		return (m_numerator % m_denominator);
 	}
-	
+
 	const float getDecimal() const
 	{
 		return (float)m_numerator / (float)m_denominator;
 	}
-	
+
 	const Fraction getSimplification()
 	{
 		Fraction simplification;
 		int gcd = (int)getGreatestCommonDivisor(getAbsoluteValue(m_numerator), m_denominator);
-		simplification.set(m_numerator / gcd, m_denominator / gcd );
+		simplification.set(m_numerator / gcd, m_denominator / gcd);
 		return simplification;
 	}
 
@@ -448,31 +465,32 @@ class MixedNumber
 private:
 	int m_wholePart;
 	Fraction m_proper;
+
 public:
 	MixedNumber()
-		:m_wholePart(0), m_proper(0) {}
-		
-	MixedNumber(const int  wp)
-		:m_wholePart(wp), m_proper(0) {}
-		
+		: m_wholePart(0), m_proper(0) {}
+
+	MixedNumber(const int wp)
+		: m_wholePart(wp), m_proper(0) {}
+
 	MixedNumber(const float n)
 	{
 		*this = MixedNumber(Fraction(n));
 	}
-		
-	MixedNumber( const int wp, const Fraction &proper)
-		:m_wholePart(wp), m_proper(proper) {}
+
+	MixedNumber(const int wp, const Fraction &proper)
+		: m_wholePart(wp), m_proper(proper) {}
 
 	MixedNumber(const Fraction &improper)
-		:m_wholePart(improper.getResult()), m_proper(improper.getRemainder(), improper.getDenominator()) {}
+		: m_wholePart(improper.getResult()), m_proper(improper.getRemainder(), improper.getDenominator()) {}
 
 	MixedNumber(const MixedNumber &other)
 	{
 		m_wholePart = other.m_wholePart;
 		m_proper = other.m_proper;
 	}
-	
-	MixedNumber& operator=(const MixedNumber &rhs)
+
+	MixedNumber &operator=(const MixedNumber &rhs)
 	{
 		if (this != &rhs)
 		{
@@ -481,63 +499,63 @@ public:
 		}
 		return *this;
 	}
-	
-	MixedNumber& operator+=(const MixedNumber &rhs)
+
+	MixedNumber &operator+=(const MixedNumber &rhs)
 	{
 		this->m_wholePart += rhs.m_wholePart;
 		this->m_proper += rhs.m_proper;
 		return *this;
 	}
-	
+
 	friend MixedNumber operator+(MixedNumber lhs, const MixedNumber &rhs)
 	{
 		lhs += rhs;
 		return lhs;
 	}
-	
-	MixedNumber& operator-=(const MixedNumber &rhs)
+
+	MixedNumber &operator-=(const MixedNumber &rhs)
 	{
 		this->m_wholePart -= rhs.m_wholePart;
 		this->m_proper -= rhs.m_proper;
 		return *this;
 	}
-	
+
 	friend MixedNumber operator-(MixedNumber lhs, const MixedNumber &rhs)
 	{
 		lhs -= rhs;
 		return lhs;
 	}
-	
+
 	MixedNumber operator-()
 	{
 		return MixedNumber(-this->m_wholePart, -this->m_proper);
 	}
-	
-	MixedNumber& operator++()
+
+	MixedNumber &operator++()
 	{
 		this->m_wholePart++;
 		return *this;
 	}
-	
-	MixedNumber& operator++(int)
+
+	MixedNumber &operator++(int)
 	{
 		this->m_wholePart++;
 		return *this;
 	}
-	
-	MixedNumber& operator--()
+
+	MixedNumber &operator--()
 	{
 		this->m_wholePart--;
 		return *this;
 	}
-	
-	MixedNumber& operator--(int)
+
+	MixedNumber &operator--(int)
 	{
 		this->m_wholePart--;
 		return *this;
 	}
-	
-	MixedNumber& operator*=(const MixedNumber &rhs)
+
+	MixedNumber &operator*=(const MixedNumber &rhs)
 	{
 		*this = MixedNumber(this->getImproperFraction() * rhs.getImproperFraction());
 		return *this;
@@ -548,8 +566,8 @@ public:
 		lhs *= rhs;
 		return lhs;
 	}
-	
-	MixedNumber& operator/=(const MixedNumber &rhs)
+
+	MixedNumber &operator/=(const MixedNumber &rhs)
 	{
 		*this = MixedNumber(this->getImproperFraction() / rhs.getImproperFraction());
 		return *this;
@@ -568,14 +586,14 @@ public:
 
 	friend bool operator!=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator==(lhs, rhs); }
 
-	friend bool operator< (const MixedNumber &lhs, const MixedNumber &rhs)
+	friend bool operator<(const MixedNumber &lhs, const MixedNumber &rhs)
 	{
 		return lhs.getImproperFraction() < rhs.getImproperFraction();
 	}
 
-	friend bool operator> (const MixedNumber &lhs, const MixedNumber &rhs) { return operator< (rhs, lhs); }
-	friend bool operator<=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator> (lhs, rhs); }
-	friend bool operator>=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator< (lhs, rhs); }
+	friend bool operator>(const MixedNumber &lhs, const MixedNumber &rhs) { return operator<(rhs, lhs); }
+	friend bool operator<=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator>(lhs, rhs); }
+	friend bool operator>=(const MixedNumber &lhs, const MixedNumber &rhs) { return !operator<(lhs, rhs); }
 
 	const Fraction getImproperFraction() const
 	{
@@ -584,14 +602,14 @@ public:
 		improper.set(numerator, m_proper.getDenominator());
 		return improper;
 	}
-	
+
 	const float getDecimal() const
 	{
 		return (float)m_wholePart + m_proper.getDecimal();
 	}
 
 	//USE INPUT HELP CLASS TO SET FRACTION CORRECT
-	friend std::istream& operator>>(std::istream& is, MixedNumber &obj)
+	friend std::istream &operator>>(std::istream &is, MixedNumber &obj)
 	{
 		std::cout << "Enter Whole Part:";
 		is >> obj.m_wholePart;
@@ -600,7 +618,7 @@ public:
 		return is;
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const MixedNumber &obj)
+	friend std::ostream &operator<<(std::ostream &os, const MixedNumber &obj)
 	{
 		os << obj.m_wholePart << '(' << obj.m_proper << ')';
 		return os;
@@ -611,35 +629,36 @@ class Decimal
 {
 private:
 	float m_decimal;
+
 public:
 	Decimal()
-		:m_decimal(0.0f) {}
+		: m_decimal(0.0f) {}
 
 	Decimal(const float dec)
-		:m_decimal(dec) {}
+		: m_decimal(dec) {}
 
 	Decimal(const int n)
-		:m_decimal(n) {}
+		: m_decimal(n) {}
 
 	Decimal(const Fraction &frac)
-		:m_decimal(frac.getDecimal()) {}
+		: m_decimal(frac.getDecimal()) {}
 
 	Decimal(const MixedNumber &mn)
-		:m_decimal(mn.getDecimal()) {}
+		: m_decimal(mn.getDecimal()) {}
 
 	Decimal(const Decimal &other)
 	{
 		this->m_decimal = other.m_decimal;
 	}
 
-	Decimal& operator=(const Decimal &other)
+	Decimal &operator=(const Decimal &other)
 	{
 		if (this != &other)
 			this->m_decimal = other.m_decimal;
 		return *this;
 	}
 
-	Decimal& operator+=(const Decimal &lhs)
+	Decimal &operator+=(const Decimal &lhs)
 	{
 		this->m_decimal += lhs.m_decimal;
 		return *this;
@@ -651,7 +670,7 @@ public:
 		return lhs;
 	}
 
-	Decimal& operator-=(const Decimal &lhs)
+	Decimal &operator-=(const Decimal &lhs)
 	{
 		this->m_decimal -= lhs.m_decimal;
 		return *this;
@@ -668,31 +687,31 @@ public:
 		return Decimal(-this->m_decimal);
 	}
 
-	Decimal& operator++()
-	{
-		this->m_decimal ++;
-		return *this;
-	}
-
-	Decimal& operator++(int)
+	Decimal &operator++()
 	{
 		this->m_decimal++;
 		return *this;
 	}
 
-	Decimal& operator--()
+	Decimal &operator++(int)
+	{
+		this->m_decimal++;
+		return *this;
+	}
+
+	Decimal &operator--()
 	{
 		this->m_decimal--;
 		return *this;
 	}
 
-	Decimal& operator--(int)
+	Decimal &operator--(int)
 	{
 		this->m_decimal--;
 		return *this;
 	}
 
-	Decimal& operator*=(const Decimal &rhs)
+	Decimal &operator*=(const Decimal &rhs)
 	{
 		this->m_decimal *= rhs.m_decimal;
 		return *this;
@@ -704,7 +723,7 @@ public:
 		return lhs;
 	}
 
-	Decimal& operator/=(const Decimal &rhs)
+	Decimal &operator/=(const Decimal &rhs)
 	{
 		this->m_decimal /= rhs.m_decimal;
 		return *this;
@@ -723,36 +742,35 @@ public:
 
 	friend bool operator!=(const Decimal &lhs, const Decimal &rhs) { return !operator==(lhs, rhs); }
 
-	friend bool operator< (const Decimal &lhs, const Decimal &rhs)
+	friend bool operator<(const Decimal &lhs, const Decimal &rhs)
 	{
 		return lhs.m_decimal < rhs.m_decimal;
 	}
 
-	friend bool operator> (const Decimal &lhs, const Decimal &rhs) { return operator< (rhs, lhs); }
-	friend bool operator<=(const Decimal &lhs, const Decimal &rhs) { return !operator> (lhs, rhs); }
-	friend bool operator>=(const Decimal &lhs, const Decimal &rhs) { return !operator< (lhs, rhs); }
+	friend bool operator>(const Decimal &lhs, const Decimal &rhs) { return operator<(rhs, lhs); }
+	friend bool operator<=(const Decimal &lhs, const Decimal &rhs) { return !operator>(lhs, rhs); }
+	friend bool operator>=(const Decimal &lhs, const Decimal &rhs) { return !operator<(lhs, rhs); }
 
-
-	friend std::ostream& operator<<(std::ostream& os, const Decimal &obj)
+	friend std::ostream &operator<<(std::ostream &os, const Decimal &obj)
 	{
 		os << obj.m_decimal;
 		return os;
 	}
 
 	//USE INPUT HELP CLASS TO SET DECIMAL CORRECT
-	friend std::istream& operator>>(std::istream& is, Decimal &obj)
+	friend std::istream &operator>>(std::istream &is, Decimal &obj)
 	{
 		std::cout << "Enter decimal: ";
 		is >> obj.m_decimal;
 		return is;
 	}
-		
+
 	const Fraction getFraction() const
 	{
 		//TODO
 		return Fraction(m_decimal);
 	}
-	
+
 	const MixedNumber getMixedNumber()
 	{
 		//TODO

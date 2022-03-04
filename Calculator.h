@@ -5,18 +5,19 @@
 #include "Input\Input.h"
 #define EXIT 0
 
-template<typename Number>
+template <typename Number>
 class Calculator
 
 {
 private:
 	std::vector<Number> m_numbers;
 	char m_operation;
+
 public:
 	Calculator() {}
 
 	Calculator(const char operation)
-		:m_operation(operation) {}
+		: m_operation(operation) {}
 
 	~Calculator() {}
 
@@ -51,7 +52,7 @@ public:
 		unsigned int lastElementindex = m_numbers.size() - 1;
 		for (unsigned int i = 0; i < m_numbers.size(); i++)
 		{
-			if(m_numbers[i] < 0) // output format to match a positive number
+			if (m_numbers[i] < 0) // output format to match a positive number
 				std::cout << " [" << m_numbers[i] << "] ";
 			else // output format to match a negative number
 				std::cout << " [ " << m_numbers[i] << "] ";
@@ -71,11 +72,20 @@ public:
 		Number result;
 		switch ((int)m_operation)
 		{
-		case ADDITION: result = getSumOf(); break;
-		case SUBSTRACTION: result = getDiffOf(); break;
-		case MULTIPLICATION: result = getProductOf(); break;
-		case DIVISION: result = getDivOf(); break;
-		default: std::cerr << "UNKNOWN OPERATION OF SIGN: " << m_operation << std::endl;
+		case ADDITION:
+			result = getSumOf();
+			break;
+		case SUBSTRACTION:
+			result = getDiffOf();
+			break;
+		case MULTIPLICATION:
+			result = getProductOf();
+			break;
+		case DIVISION:
+			result = getDivOf();
+			break;
+		default:
+			std::cerr << "UNKNOWN OPERATION OF SIGN: " << m_operation << std::endl;
 			std::cerr << "EMPTY INSTANCE OF ENTITY NUMBER RETURNED" << std::endl;
 			break;
 		}
@@ -100,7 +110,7 @@ public:
 		Number diff = 0;
 		if (!m_numbers.empty()) //guard against empty vector container
 		{
-			diff = m_numbers.front(); // collecte first container element  
+			diff = m_numbers.front();	  // collecte first container element
 			if (diff != m_numbers.back()) // guard against container of size 1
 			{
 				for (unsigned int i = 1; i < m_numbers.size(); i++) // start iterations from second container element
@@ -117,7 +127,7 @@ public:
 		Number product = 0;
 		if (!m_numbers.empty()) //guard against empty vector container
 		{
-			product = m_numbers.front(); // collecte first container element  
+			product = m_numbers.front();	 // collecte first container element
 			if (product != m_numbers.back()) // guard against container of size 1
 			{
 				for (unsigned int i = 1; i < m_numbers.size(); i++) // start iterations from second container element
@@ -131,10 +141,10 @@ public:
 
 	Number getDivOf()
 	{
-		Number  division = 0;
+		Number division = 0;
 		if (!m_numbers.empty()) //guard against empty vector container
 		{
-			division = m_numbers.front(); // collecte first container element  
+			division = m_numbers.front();	  // collecte first container element
 			if (division != m_numbers.back()) // guard against container of size 1
 			{
 				for (unsigned int i = 1; i < m_numbers.size(); i++) // start iterations from second container element
